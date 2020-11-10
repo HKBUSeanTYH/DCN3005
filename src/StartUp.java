@@ -8,6 +8,7 @@ public class StartUp {
 		Scanner in = new Scanner(System.in);
 		System.out.println("Please input your password");
 		
+		//need to put UDP and TCP on startup codes
 		
 		String pw = in.nextLine();
 		System.out.println(pw);
