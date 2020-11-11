@@ -9,7 +9,7 @@ public class StartUp {
 	public static void main(String[] args) throws IOException{
 		// TODO Auto-generated method stub
 		
-		sharedRoot sroot = new sharedRoot();		//create separate class so that users cant tamper with the data
+		sharedRoot sroot = new sharedRoot();
 		sroot.start();
 		
 		Scanner in = new Scanner(System.in);
