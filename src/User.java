@@ -68,6 +68,30 @@ public class User {
         return false;
     }
     
+    public boolean logIn(String username, String pw) {			
+    	//used to check login we do not want to have getters or setters because one pc is logging into another persons pc. have to keep personal list of username and pw private and other user keeps their list private
+    	Node prev = Head;
+
+        for (int i=0; i<count; i++){
+            if (prev.username.equals(username)){
+            	if(prev.password.equals(pw)) {
+            		return true;
+            	}else {
+            		System.out.println("Password not matching!");
+            		break;
+            	}
+
+            }else{
+                prev= prev.next;
+                continue;
+
+            }
+        }
+        System.out.println("Username not found!");
+    	
+    	return false;
+    }
+    
     public int getCount(){return this.count;}
 
 	public static void main(String[] args) {
