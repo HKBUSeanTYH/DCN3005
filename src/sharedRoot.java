@@ -6,9 +6,9 @@ import java.util.Scanner;
 
 public class sharedRoot {
 	private String sharedroot;
+	private File userData = new File("userData.txt");
 	
 	public void start() throws IOException {
-		File userData = new File("userData.txt");
 
 		//onstart check if userData file exist
 		if (!userData.exists()) {
@@ -55,6 +55,22 @@ public class sharedRoot {
 //			}
 //			
 //		}
+	}
+	
+	public User createUsers() throws IOException {
+		User users = new User(); //initiate the linked list
+		
+		Scanner scanner = new Scanner(userData);
+		
+		while (scanner.hasNextLine()) {
+			String line = scanner.nextLine();
+			String[] lineElem = line.split(" ");
+			
+			if (lineElem[0] == "sharedRoot:") {continue;}
+			users.add(lineElem[0], lineElem[1]); //add(user name, user password)
+		}
+		
+		return users;
 	}
 
 	public static void main(String[] args) throws IOException {
