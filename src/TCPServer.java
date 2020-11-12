@@ -12,9 +12,10 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class TCPServer {			//copypasted the file server from lab, needs to be modified
+public class TCPServer {				
+	//copypasted the file server from lab, needs to be modified
 
-	public TCPServer(int port) throws IOException {
+	public TCPServer(int port, User users) throws IOException {			//use linkedlist to make a tcpserver class so that can use login method
 		ServerSocket serverSocket = new ServerSocket(port);
 		System.out.println("Listening at port " + port);
 		while(true) {
@@ -26,6 +27,7 @@ public class TCPServer {			//copypasted the file server from lab, needs to be mo
 		}
 	}
 	
+	//serve needs to be rewritten to accept commands and then call methods to fulfill the command	
 	private void serve(Socket socket) {
 		byte[] buffer = new byte[1024];
 		try {
@@ -61,24 +63,25 @@ public class TCPServer {			//copypasted the file server from lab, needs to be mo
 
 	public static void main(String[] args) {
 
-		int port = 0;
-		try {
-			if (args.length != 1)
-				throw new NumberFormatException();
-			
-			port = Integer.parseInt(args[0]);
-			
-		} catch (NumberFormatException e) {
-			System.err.println("Invalid port number.");
-			System.err.println("Usage: java FileServer portNumber");
-			System.exit(-1);
-		}
-		
-		try {
-			new TCPServer(port);
-		} catch (IOException e) {
-			System.err.println("Unable to start server with port " + port);
-		}
+		//please do not delete this.
+//		int port = 0;
+//		try {
+//			if (args.length != 1)
+//				throw new NumberFormatException();
+//			
+//			port = Integer.parseInt(args[0]);
+//			
+//		} catch (NumberFormatException e) {
+//			System.err.println("Invalid port number.");
+//			System.err.println("Usage: java FileServer portNumber");
+//			System.exit(-1);
+//		}
+//		
+//		try {
+//			new TCPServer(port);
+//		} catch (IOException e) {
+//			System.err.println("Unable to start server with port " + port);
+//		}
 	}
 	
 
