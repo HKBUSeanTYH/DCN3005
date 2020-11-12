@@ -11,7 +11,8 @@ public class StartUp {
 		
 		sharedRoot sroot = new sharedRoot();
 		sroot.start();
-		User users = sroot.createUsers();			//on startup of the class we get the list of users to check for any logins
+		User users = sroot.createUsers();			
+		//on startup of the class we get the list of users to check for any logins
 		
 		
 		
@@ -19,6 +20,10 @@ public class StartUp {
 		
 		System.out.println("Please input\nServer IP: ");
 		String ip = in.nextLine().trim();
+		
+		//do we set only one port for server? ie hard code server port as xxxxx?
+//		System.out.print("Port no: ");
+//		int port = Integer.parseInt(in.nextLine());
 		
 		System.out.println("Please input your password");
 		String username = in.nextLine();
