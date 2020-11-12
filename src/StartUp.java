@@ -26,6 +26,8 @@ public class StartUp {
 		System.out.println("Please input your password");
 		String pw = in.nextLine();
 		
+		//use ipAddr to connect to tcp, send username and password to the TCP "server" to perform user.login()
+		
 		//need to put UDP and TCP on startup codes
 		
 		System.out.println(username+": "+pw);
