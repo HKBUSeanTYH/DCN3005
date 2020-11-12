@@ -22,20 +22,15 @@ public class StartUp {
 		String ip = in.nextLine().trim();
 		
 		//do we set only one port for server? ie hard code server port as xxxxx?
-//		System.out.print("Port no: ");
-//		int port = Integer.parseInt(in.nextLine());
+		System.out.print("Port no: ");
+		int port = Integer.parseInt(in.nextLine());
 		
-		System.out.println("Please input your password");
-		String username = in.nextLine();
-		
-		System.out.println("Please input your password");
-		String pw = in.nextLine();
+		TCPClient client = new TCPClient(ip, port);
 		
 		//use ipAddr to connect to tcp, send username and password to the TCP "server" to perform user.login()
 		
 		//need to put UDP and TCP on startup codes
 		
-		System.out.println(username+": "+pw);
 		in.close();
 	}
 
