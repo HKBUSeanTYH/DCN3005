@@ -26,12 +26,17 @@ public class TCPClient {
 		}
 	}
 	
-	public void sendLogin(String username, String pw, DataOutputStream out) {
+	public void sendLogin(String username, String pw, DataOutputStream out) throws IOException {
 		
 	}
 
 	public void sendCommand(DataOutputStream out) throws IOException {
 
+	}
+	
+	//we need a way to receive the socket's inputstream (DataInputStream input = new DataInputStream(socket.getInputStream())
+	public void receive() throws IOException {
+		
 	}
 
 	public static void main(String[] args) {
