@@ -11,6 +11,9 @@ public class StartUp {
 		
 		sharedRoot sroot = new sharedRoot();
 		sroot.start();
+		User users = sroot.createUsers();			//on startup of the class we get the list of users to check for any logins
+		
+		
 		
 		Scanner in = new Scanner(System.in);
 		

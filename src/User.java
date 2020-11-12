@@ -55,7 +55,7 @@ public class User {
         Node prev = Head;
 
         for (int i=0; i<count; i++){
-            if (prev.username == k){
+            if (prev.username.equals(k)){
                 return true;
 
             }else{
@@ -78,7 +78,7 @@ public class User {
             		return true;
             	}else {
             		System.out.println("Password not matching!");
-            		break;
+            		return false;
             	}
 
             }else{

@@ -1,12 +1,14 @@
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
 public class sharedRoot {
 	private String sharedroot;
 	private File userData = new File("userData.txt");
+	private String users = "";
 	
 	public void start() throws IOException {
 
@@ -34,27 +36,25 @@ public class sharedRoot {
 				}
 				
 				//some basic users that are initiated on setup
-				out.write("admin 123456".getBytes());
-				out.write("sean 654321".getBytes());
-				out.write("oshan 123321".getBytes());
+				out.write("admin 123456 \n".getBytes());
+				out.write("sean 654321 \n".getBytes());
+				out.write("oshan 123321 \n".getBytes());
 				
 			}
 
 			out.close();
 		}
 		
-		//i m planning on using this code elsewhere i got too much into coding and realised that i dont need to make User this early
-//		else {
-//			Scanner scanner = new Scanner(userData);
-//			
-//			while (scanner.hasNextLine()) {
-//				String line = scanner.nextLine();
-//				String[] lineElem = line.split(" ");
-//				
-//				if (lineElem[0] == "sharedRoot:") {continue;}
-//			}
-//			
-//		}
+		//scanning userdata to users string to copy to new userdata file if overwrite the shared root
+		Scanner in = new Scanner(userData);
+		
+		while (in.hasNextLine()) {
+			String line = in.nextLine();
+			String[] lineElem = line.split(" ");
+			
+			if (lineElem[0].equals("sharedRoot:")) {continue;}
+			users = users + line+" ";
+		}
 	}
 	
 	public User createUsers() throws IOException {
@@ -66,7 +66,7 @@ public class sharedRoot {
 			String line = scanner.nextLine();
 			String[] lineElem = line.split(" ");
 			
-			if (lineElem[0] == "sharedRoot:") {continue;}
+			if (lineElem[0].equals("sharedRoot:")) {continue;}
 			users.add(lineElem[0], lineElem[1]); //add(user name, user password)
 		}
 		
@@ -75,8 +75,12 @@ public class sharedRoot {
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
-
-		
+//		File filed = new File("userData.txt");
+//		Scanner in = new Scanner(filed);
+//		
+//		while(in.hasNextLine()) {
+//			System.out.print(in.nextLine());
+//		}
 
 	}
 
