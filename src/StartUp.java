@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class StartUp {
 
-	public static void main(String[] args) throws IOException{
+	public static void main(String[] args) throws IOException, InterruptedException{
 		// TODO Auto-generated method stub
 		
 		sharedRoot sroot = new sharedRoot();
@@ -24,9 +24,21 @@ public class StartUp {
 		int port = Integer.parseInt(in.nextLine());
 		
 		System.out.println("Now running personal server in the background");
-		TCPServer server = new TCPServer(12345, users);	//this refers to this pc's self server action with its own list of accepted users
+		ProcessBuilder server = new ProcessBuilder("java", "-cp", "D:\\seant\\eclipse-workspace\\DCN3005\\bin", "TCPServer", "12345", "users");
 		
-		TCPClient client = new TCPClient(ip, port);	//this is to act as a client and connect to other peoples server
+		//TCPServer server = new TCPServer(12345, users);	//this refers to this pc's self server action with its own list of accepted users
+		
+		ProcessBuilder client = new ProcessBuilder("java", "-cp", "D:\\seant\\eclipse-workspace\\DCN3005\\bin", "TCPClient", "192.168.50.245", "12345");
+		
+		server.inheritIO();
+		client.inheritIO();
+		Process s = server.start();
+		Process c = client.start();
+		s.waitFor();
+		c.waitFor();
+		
+		System.out.println("System off");
+		//TCPClient client = new TCPClient(ip, port);	//this is to act as a client and connect to other peoples server
 		
 		//use ipAddr to connect to tcp, send username and password to the TCP "server" to perform user.login()
 		
