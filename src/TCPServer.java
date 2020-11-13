@@ -22,40 +22,52 @@ public class TCPServer {
 			Socket clientSocket = serverSocket.accept();
 			System.out.printf("Connected client (%s:%d)\n", clientSocket.getInetAddress(), clientSocket.getPort());
 			new Thread(()-> {
-				serve(clientSocket);
+				serve(clientSocket, users);
 			}).start();
 		}
 	}
 	
 	//serve needs to be rewritten to accept commands and then call methods to fulfill the command	
-	private void serve(Socket socket) {
+	private void serve(Socket socket, User users) {
 		byte[] buffer = new byte[1024];
 		try {
 			DataInputStream in = new DataInputStream(socket.getInputStream());
+			DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 			
-			int nameLen = in.readInt();
-			in.read(buffer, 0, nameLen);
-			String name = new String(buffer, 0, nameLen);
-
-			System.out.print("Downloading file %s " + name);
-
-			long size = in.readLong();
-			System.out.printf("(%d)", size);
-
+			int userlogin = in.readInt();
+			in.read(buffer, 0, userlogin);
+			String namepw = new String(buffer, 0, userlogin);
 			
-			File file = new File(name);
-			FileOutputStream out = new FileOutputStream(file);
-
-			while(size > 0) {
-				int len = in.read(buffer, 0, buffer.length);
-				out.write(buffer, 0, len);
-				size -= len;
-				System.out.print(".");
+			String[] cmd = namepw.split(" ");
+			if (users.logIn(cmd[0], cmd[1])) {
+				String result = "success";
+				out.writeInt(result.length());
+				out.write(result.getBytes(), 0, result.length());
+			}else {
+				String result = "fail";
+				out.writeInt(result.length());
+				out.write(result.getBytes(), 0, result.length());
 			}
-			System.out.println("\nDownload completed.");
-			
-			in.close();
-			out.close();
+
+//			System.out.print("Downloading file %s " + name);
+//
+//			long size = in.readLong();
+//			System.out.printf("(%d)", size);
+//
+//			
+//			File file = new File(name);
+//			FileOutputStream out = new FileOutputStream(file);
+//
+//			while(size > 0) {
+//				int len = in.read(buffer, 0, buffer.length);
+//				out.write(buffer, 0, len);
+//				size -= len;
+//				System.out.print(".");
+//			}
+//			System.out.println("\nDownload completed.");
+//			
+//			in.close();
+//			out.close();
 		} catch (IOException e) {
 			System.err.println("unable to download file.");
 		}
