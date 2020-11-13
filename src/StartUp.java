@@ -25,7 +25,9 @@ public class StartUp {
 		System.out.print("Port no: ");
 		int port = Integer.parseInt(in.nextLine());
 		
-		TCPClient client = new TCPClient(ip, port);
+		TCPServer server = new TCPServer(12345, users);	//this refers to this pc's self server action with its own list of accepted users
+		
+		TCPClient client = new TCPClient(ip, port);	//this is to act as a client and connect to other peoples server
 		
 		//use ipAddr to connect to tcp, send username and password to the TCP "server" to perform user.login()
 		
