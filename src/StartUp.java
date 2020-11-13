@@ -14,8 +14,6 @@ public class StartUp {
 		User users = sroot.createUsers();			
 		//on startup of the class we get the list of users to check for any logins
 		
-		
-		
 		Scanner in = new Scanner(System.in);
 		
 		System.out.println("Please input\nServer IP: ");
@@ -25,6 +23,7 @@ public class StartUp {
 		System.out.print("Port no: ");
 		int port = Integer.parseInt(in.nextLine());
 		
+		System.out.println("Now running personal server in the background");
 		TCPServer server = new TCPServer(12345, users);	//this refers to this pc's self server action with its own list of accepted users
 		
 		TCPClient client = new TCPClient(ip, port);	//this is to act as a client and connect to other peoples server

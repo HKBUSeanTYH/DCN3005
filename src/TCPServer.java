@@ -17,6 +17,7 @@ public class TCPServer {
 
 	public TCPServer(int port, User users) throws IOException {			//use linkedlist to make a tcpserver class so that can use login method
 		ServerSocket serverSocket = new ServerSocket(port);
+		System.out.println("Now running server in the background");
 		System.out.println("Listening at port " + port);
 		while(true) {
 			Socket clientSocket = serverSocket.accept();

@@ -42,7 +42,6 @@ public class sharedRoot {
 				
 			}
 
-			out.close();
 		}
 		
 		//scanning userdata to users string to copy to new userdata file if overwrite the shared root
