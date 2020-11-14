@@ -5,7 +5,10 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
-public class TCPClient {
+public class TCPClient extends Thread {
+	
+	String serverIP;
+	int port;
 
 	public TCPClient(String serverIP, int port) throws IOException{
 		
@@ -67,9 +70,17 @@ public class TCPClient {
 		
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
-
 	}
-
+	
+	public void run() {
+		try {
+			TCPClient client = new TCPClient(serverIP, port);
+		}catch (Exception e) {
+			System.out.println("Error in launching client");
+		}
+		
+	}
+	
 }

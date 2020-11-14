@@ -12,9 +12,12 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class TCPServer {				
+public class TCPServer extends Thread {
+	
+	int port;
+	User users;			//pass value to this global variable in startup
+	
 	//copypasted the file server from lab, needs to be modified
-
 	public TCPServer(int port, User users) throws IOException {			//use linkedlist to make a tcpserver class so that can use login method
 		ServerSocket serverSocket = new ServerSocket(port);
 		System.out.println("Listening at port " + port);
@@ -94,6 +97,15 @@ public class TCPServer {
 //		} catch (IOException e) {
 //			System.err.println("Unable to start server with port " + port);
 //		}
+	}
+	
+	public void run() {
+		try {
+			TCPServer server = new TCPServer(port, users);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Error in launching server");
+		}
 	}
 	
 
