@@ -31,6 +31,8 @@ public class TCPClient extends Thread {
 		}
 		
 		System.out.println("Log in success!");
+		
+		
 	}
 
 //	public TCPClient(String serverIP, int port) throws IOException{

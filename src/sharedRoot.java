@@ -35,13 +35,15 @@ public class sharedRoot {
 					isDir = true;
 				}
 				
-				//some basic users that are initiated on setup
-				out.write("admin 123456 \n".getBytes());
-				out.write("sean 654321 \n".getBytes());
-				out.write("oshan 123321 \n".getBytes());
-				
 			}
-
+			
+			//some basic users that are initiated on setup
+			out.write("admin 123456 admin \n".getBytes());
+			out.write("sean 654321 group \n".getBytes());
+			out.write("oshan 123321 group \n".getBytes());
+			out.write("client 111111 uni \n".getBytes());
+			
+			out.close();
 		}
 		
 		//scanning userdata to users string to copy to new userdata file if overwrite the shared root
@@ -56,8 +58,8 @@ public class sharedRoot {
 		}
 	}
 	
-	public User createUsers() throws IOException {
-		User users = new User(); //initiate the linked list
+	public Users createUsers() throws IOException {
+		Users users = new Users(); //initiate the linked list
 		
 		Scanner scanner = new Scanner(userData);
 		
@@ -66,7 +68,7 @@ public class sharedRoot {
 			String[] lineElem = line.split(" ");
 			
 			if (lineElem[0].equals("sharedRoot:")) {continue;}
-			users.add(lineElem[0], lineElem[1]); //add(user name, user password)
+			users.add(lineElem[0], lineElem[1], lineElem[2]); //add(user name, user password)
 		}
 		
 		return users;

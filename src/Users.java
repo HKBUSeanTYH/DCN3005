@@ -1,21 +1,25 @@
-public class User {
+public class Users {
 	private class Node{
 		String username;
 		String password;
+		String access;
 		
 		Node next;
 		
-		Node(String x, String y){this.username =x; this.password = y;}
+		Node(String x, String y, String z){this.username =x; this.password = y;this.access =z;}
 		
 		
 	}
 	
+	private String loginName;
+	private String loginAccess;
+	
 	private Node Head, Tail = null;
 	private int count = 0;
 	
-	public void add(String username, String pw){     //enqueue
+	public void add(String username, String pw, String acc){     //enqueue
 
-        Node n = new Node(username, pw);
+        Node n = new Node(username, pw, acc);
 
         if (find(username) == true){
             return;
@@ -75,6 +79,8 @@ public class User {
         for (int i=0; i<count; i++){
             if (prev.username.equals(username)){
             	if(prev.password.equals(pw)) {
+            		loginName = prev.username;
+            		loginAccess = prev.access;
             		return true;
             	}else {
             		System.out.println("Password not matching!");
@@ -93,6 +99,8 @@ public class User {
     }
     
     public int getCount(){return this.count;}
+    public String loggedIn() {return this.loginName;}
+    public String getAccess() {return this.loginAccess;}
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub

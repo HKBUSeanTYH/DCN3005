@@ -15,7 +15,7 @@ import java.net.Socket;
 public class TCPServer extends Thread {
 	
 	int port;
-	User users;			//pass value to this global variable in startup
+	Users users;			//pass value to this global variable in startup
 	
 	
 	
@@ -45,7 +45,7 @@ public class TCPServer extends Thread {
 //	}
 	
 	//serve needs to be rewritten to accept commands and then call methods to fulfill the command	
-	private void serve(Socket socket, User users) {
+	private void serve(Socket socket, Users users) {
 		byte[] buffer = new byte[1024];
 		try {
 			DataInputStream in = new DataInputStream(socket.getInputStream());

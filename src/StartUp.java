@@ -9,14 +9,14 @@ public class StartUp {
 	public static void main(String[] args) throws IOException, InterruptedException{
 		// TODO Auto-generated method stub
 		
-		sharedRoot sroot = new sharedRoot();
+		sharedRoot sroot = new sharedRoot();		//D:\seant\2uniFiles
 		sroot.start();
-		User users = sroot.createUsers();			
+		Users users = sroot.createUsers();			
 		//on startup of the class we get the list of users to check for any logins
 		
 		Scanner in = new Scanner(System.in);
 		
-		System.out.println("Please input\nServer IP: ");
+		System.out.println("Please input\nServer IP: ");			//192.168.50.245
 		String ip = in.nextLine().trim();
 		
 		//do we set only one port for server? ie hard code server port as xxxxx?
