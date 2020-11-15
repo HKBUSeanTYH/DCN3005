@@ -9,9 +9,8 @@ public class TCPClient extends Thread {
 	
 	String serverIP;
 	int port;
-
-	public TCPClient(String serverIP, int port) throws IOException{
-		
+	
+	public void Client() throws IOException{
 		Scanner scanner = new Scanner(System.in); // take user input and send to server
 		boolean login = false;
 		
@@ -32,8 +31,32 @@ public class TCPClient extends Thread {
 		}
 		
 		System.out.println("Log in success!");
-		
 	}
+
+//	public TCPClient(String serverIP, int port) throws IOException{
+//		
+//		Scanner scanner = new Scanner(System.in); // take user input and send to server
+//		boolean login = false;
+//		
+//		while (!login) {
+//			Socket socket = new Socket(serverIP, port);
+//			DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+//			DataInputStream in = new DataInputStream(socket.getInputStream());
+//			
+//			System.out.println("Please input your username");
+//			String username = scanner.nextLine();
+//			System.out.println("Please input your password");
+//			String pw = scanner.nextLine();
+//			System.out.println("Connecting to server...");
+//			
+//			if (sendLogin(username, pw, out, in)) {		//if login method returns true break out of while loop (maybe change to a do-while loop?)
+//				login = true;
+//			}			
+//		}
+//		
+//		System.out.println("Log in success!");
+//		
+//	}
 	
 	public boolean sendLogin(String username, String pw, DataOutputStream out, DataInputStream in) throws IOException {
 		String send = username+" "+pw;
@@ -76,7 +99,8 @@ public class TCPClient extends Thread {
 	
 	public void run() {
 		try {
-			TCPClient client = new TCPClient(serverIP, port);
+			Client();
+			//TCPClient client = new TCPClient(serverIP, port);		previous class constructor
 		}catch (Exception e) {
 			System.out.println("Error in launching client");
 		}

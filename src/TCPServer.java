@@ -17,8 +17,9 @@ public class TCPServer extends Thread {
 	int port;
 	User users;			//pass value to this global variable in startup
 	
-	//copypasted the file server from lab, needs to be modified
-	public TCPServer(int port, User users) throws IOException {			//use linkedlist to make a tcpserver class so that can use login method
+	
+	
+	public void Server() throws IOException{
 		ServerSocket serverSocket = new ServerSocket(port);
 		System.out.println("Listening at port " + port);
 		while(true) {
@@ -29,6 +30,19 @@ public class TCPServer extends Thread {
 			}).start();
 		}
 	}
+	
+	//copypasted the file server from lab, needs to be modified
+//	public TCPServer(int port, User users) throws IOException {			//use linkedlist to make a tcpserver class so that can use login method
+//		ServerSocket serverSocket = new ServerSocket(port);
+//		System.out.println("Listening at port " + port);
+//		while(true) {
+//			Socket clientSocket = serverSocket.accept();
+//			System.out.printf("Connected client (%s:%d)\n", clientSocket.getInetAddress(), clientSocket.getPort());
+//			new Thread(()-> {
+//				serve(clientSocket, users);
+//			}).start();
+//		}
+//	}
 	
 	//serve needs to be rewritten to accept commands and then call methods to fulfill the command	
 	private void serve(Socket socket, User users) {
@@ -101,7 +115,8 @@ public class TCPServer extends Thread {
 	
 	public void run() {
 		try {
-			TCPServer server = new TCPServer(port, users);
+			Server();
+			//TCPServer server = new TCPServer(port, users);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			System.out.println("Error in launching server");

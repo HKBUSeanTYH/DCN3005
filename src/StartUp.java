@@ -24,19 +24,22 @@ public class StartUp {
 		int port = Integer.parseInt(in.nextLine());
 		
 		System.out.println("Now running personal server in the background");
-		//dont use multi-process because cant pass linkedlist as argument to processbuilder	
-		//ProcessBuilder server = new ProcessBuilder("java", "-cp", "D:\\seant\\eclipse-workspace\\DCN3005\\bin", "TCPServer", "12345", "users");		
-		//ProcessBuilder client = new ProcessBuilder("java", "-cp", "D:\\seant\\eclipse-workspace\\DCN3005\\bin", "TCPClient", "192.168.50.245", "12345");
 		
-//		server.inheritIO();
-//		client.inheritIO();
-//		Process s = server.start();
-//		Process c = client.start();
-//		s.waitFor();
-//		c.waitFor();
+		TCPServer server = new TCPServer();
+		server.port = 12345;
+		server.users = users;
 		
-		//TCPServer server = new TCPServer(12345, users);	//this refers to this pc's self server action with its own list of accepted users
-		//TCPClient client = new TCPClient(ip, port);	//this is to act as a client and connect to other peoples server
+		TCPClient client = new TCPClient();
+		client.serverIP =ip;
+		client.port = port;
+		
+		client.start();
+		server.start();
+		client.join();
+		server.join();
+		
+//		TCPServer server = new TCPServer(12345, users);	//this refers to this pc's self server action with its own list of accepted users
+//		TCPClient client = new TCPClient(ip, port);	//this is to act as a client and connect to other peoples server
 		
 		//use ipAddr to connect to tcp, send username and password to the TCP "server" to perform user.login()
 		
@@ -46,3 +49,14 @@ public class StartUp {
 	}
 
 }
+
+//dont use multi-process because cant pass linkedlist as argument to processbuilder	
+		//ProcessBuilder server = new ProcessBuilder("java", "-cp", "D:\\seant\\eclipse-workspace\\DCN3005\\bin", "TCPServer", "12345", "users");		
+		//ProcessBuilder client = new ProcessBuilder("java", "-cp", "D:\\seant\\eclipse-workspace\\DCN3005\\bin", "TCPClient", "192.168.50.245", "12345");
+		
+//		server.inheritIO();
+//		client.inheritIO();
+//		Process s = server.start();
+//		Process c = client.start();
+//		s.waitFor();
+//		c.waitFor();
