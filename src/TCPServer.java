@@ -70,6 +70,7 @@ public class TCPServer extends Thread {
 				sendOut("1. Read file list", out);
 				sendOut("3. Upload and download files", out);
 				sendOut("7. Read file information", out);
+				sendOut("\nPlease input a number", out);
 				sendOut("end", out);
 				
 			}else if (access.equalsIgnoreCase("partial")) {
@@ -79,6 +80,7 @@ public class TCPServer extends Thread {
 				sendOut("3. Upload and download files", out);
 				sendOut("6. Change file/target name", out);
 				sendOut("7. Read file information", out);
+				sendOut("\nPlease input a number", out);
 				sendOut("end", out);
 				
 			}else if (access.equalsIgnoreCase("full")) {
@@ -90,6 +92,7 @@ public class TCPServer extends Thread {
 				sendOut("5. Delete sub-directory", out);
 				sendOut("6. Change file/target name", out);
 				sendOut("7. Read file information", out);
+				sendOut("\nPlease input a number", out);
 				sendOut("end", out);
 			}
 			
@@ -120,6 +123,21 @@ public class TCPServer extends Thread {
 	public void sendOut(String str, DataOutputStream out) throws IOException {
 		out.writeInt(str.length());
 		out.write(str.getBytes(), 0, str.length());
+	}
+	
+	public void receiveCmd(DataInputStream in) throws IOException {
+		byte[] buffer = new byte[1024];
+		try {
+			while (true) {
+				int len = in.readInt();
+				in.read(buffer, 0, len);	//read into the buffer the len amount of data from the inputstream
+				
+				String result = (new String(buffer, 0, len));
+			}
+		} catch (IOException ex) {
+			System.out.println("Server connection dropped");
+			System.exit(-1);
+		}
 	}
 
 	public static void main(String[] args) {
