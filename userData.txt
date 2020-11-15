@@ -1,5 +1,5 @@
 sharedRoot: D:\seant\2uniFiles
-admin 123456 admin 
-sean 654321 group 
-oshan 123321 group 
-client 111111 uni 
+admin 123456 full 
+sean 654321 partial 
+oshan 123321 partial 
+client 111111 basic 

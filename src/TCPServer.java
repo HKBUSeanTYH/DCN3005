@@ -58,15 +58,41 @@ public class TCPServer extends Thread {
 			
 			String[] cmd = namepw.split(" ");
 			if (users.logIn(cmd[0], cmd[1])) {
-				String result = "success";
-				out.writeInt(result.length());
-				out.write(result.getBytes(), 0, result.length());
+				sendOut("success", out);
 			}else {
-				String result = "fail";
-				out.writeInt(result.length());
-				out.write(result.getBytes(), 0, result.length());
+				sendOut("Failure", out);
 			}
-
+			
+			String access = users.getAccess();
+			
+			if (access.equalsIgnoreCase("all")) {
+				sendOut("Your available actions: ", out);
+				sendOut("1. Read file list", out);
+				sendOut("3. Upload and download files", out);
+				sendOut("7. Read file information", out);
+				sendOut("end", out);
+				
+			}else if (access.equalsIgnoreCase("partial")) {
+				sendOut("Your available actions: ", out);
+				sendOut("1. Read file list", out);
+				sendOut("2. Create sub-directory", out);
+				sendOut("3. Upload and download files", out);
+				sendOut("6. Change file/target name", out);
+				sendOut("7. Read file information", out);
+				sendOut("end", out);
+				
+			}else if (access.equalsIgnoreCase("full")) {
+				sendOut("Your available actions: ", out);
+				sendOut("1. Read file list", out);
+				sendOut("2. Create sub-directory", out);
+				sendOut("3. Upload and download files", out);
+				sendOut("4. Delete files", out);
+				sendOut("5. Delete sub-directory", out);
+				sendOut("6. Change file/target name", out);
+				sendOut("7. Read file information", out);
+				sendOut("end", out);
+			}
+			
 //			System.out.print("Downloading file %s " + name);
 //
 //			long size = in.readLong();
@@ -89,6 +115,11 @@ public class TCPServer extends Thread {
 		} catch (IOException e) {
 			System.err.println("unable to download file.");
 		}
+	}
+	
+	public void sendOut(String str, DataOutputStream out) throws IOException {
+		out.writeInt(str.length());
+		out.write(str.getBytes(), 0, str.length());
 	}
 
 	public static void main(String[] args) {

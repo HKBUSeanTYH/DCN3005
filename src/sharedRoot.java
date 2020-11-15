@@ -38,10 +38,15 @@ public class sharedRoot {
 			}
 			
 			//some basic users that are initiated on setup
-			out.write("admin 123456 admin \n".getBytes());
-			out.write("sean 654321 group \n".getBytes());
-			out.write("oshan 123321 group \n".getBytes());
-			out.write("client 111111 uni \n".getBytes());
+			out.write("admin 123456 full \n".getBytes());
+			out.write("sean 654321 partial \n".getBytes());
+			out.write("oshan 123321 partial \n".getBytes());
+			out.write("client 111111 basic \n".getBytes());
+			
+			//implementation of simplified access control
+			//owner --> full; group -->partial; universe --> basic
+			//basic can only read, upload/download and list files; partial can create sub-directories, rename target and basic privileges;
+			//admin can delete and partial privileges
 			
 			out.close();
 		}

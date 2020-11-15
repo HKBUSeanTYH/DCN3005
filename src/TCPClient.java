@@ -14,10 +14,14 @@ public class TCPClient extends Thread {
 		Scanner scanner = new Scanner(System.in); // take user input and send to server
 		boolean login = false;
 		
+		Socket socket = null;
+		DataOutputStream out = null;
+		DataInputStream in = null;
+		
 		while (!login) {
-			Socket socket = new Socket(serverIP, port);
-			DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-			DataInputStream in = new DataInputStream(socket.getInputStream());
+			socket = new Socket(serverIP, port);
+			out = new DataOutputStream(socket.getOutputStream());
+			in = new DataInputStream(socket.getInputStream());
 			
 			System.out.println("Please input your username");
 			String username = scanner.nextLine();
@@ -32,6 +36,11 @@ public class TCPClient extends Thread {
 		
 		System.out.println("Log in success!");
 		
+		receive(in);
+		
+		String cmd = scanner.nextLine();
+		
+		sendCmd(cmd, out, in);
 		
 	}
 
@@ -89,13 +98,30 @@ public class TCPClient extends Thread {
 		return false;
 	}
 
-	public void sendCommand(DataOutputStream out) throws IOException {
-
+	public void sendCmd(String str, DataOutputStream out, DataInputStream in) throws IOException {
+		out.writeInt(str.length());
+		out.write(str.getBytes(), 0, str.length());
+		receive(in);
 	}
 	
 	//we need a way to receive the socket's inputstream (DataInputStream input = new DataInputStream(socket.getInputStream())
-	public void receive() throws IOException {
-		
+	public void receive(DataInputStream in) throws IOException {
+		byte[] buffer = new byte[1024];
+		try {
+			while (true) {
+				int len = in.readInt();
+				in.read(buffer, 0, len);	//read into the buffer the len amount of data from the inputstream
+				
+				String result = (new String(buffer, 0, len));
+				if (result.equals("end")) {
+					break;
+				}
+				System.out.println(result);
+			}
+		} catch (IOException ex) {
+			System.out.println("Server connection dropped");
+			System.exit(-1);
+		}
 	}
 
 	public static void main(String[] args) throws IOException {
