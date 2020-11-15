@@ -69,7 +69,10 @@ public class TCPClient extends Thread {
 				int len = in.readInt();
 				in.read(buffer, 0, len);	//read into the buffer the len amount of data from the inputstream
 				
-				if ((new String(buffer, 0, len)).equalsIgnoreCase("sucess")) {				//write a method to check if the login is success
+				String result = (new String(buffer, 0, len));
+				System.out.println(result);
+				
+				if (result.equalsIgnoreCase("success")) {				//write a method to check if the login is success
 					return true;
 				}else {
 					System.out.println("Username and password not accepted");						//how to terminate system or terminate login??

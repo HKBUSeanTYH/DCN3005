@@ -54,6 +54,7 @@ public class TCPServer extends Thread {
 			int userlogin = in.readInt();
 			in.read(buffer, 0, userlogin);
 			String namepw = new String(buffer, 0, userlogin);
+			//System.out.println(namepw);
 			
 			String[] cmd = namepw.split(" ");
 			if (users.logIn(cmd[0], cmd[1])) {
