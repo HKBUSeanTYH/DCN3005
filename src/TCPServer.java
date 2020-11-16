@@ -14,6 +14,7 @@ import java.net.Socket;
 
 public class TCPServer extends Thread {
 	
+	String sharedroot;
 	int port;
 	Users users;			//pass value to this global variable in startup
 	
@@ -151,7 +152,7 @@ public class TCPServer extends Thread {
 		return cmd;
 	}
 	
-	public void executeCmd() {
+	public void executeCmd(String cmd, DataOutputStream out) {
 		
 	}
 

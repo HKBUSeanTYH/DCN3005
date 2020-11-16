@@ -19,6 +19,7 @@ public class StartUp {
 		TCPServer server = new TCPServer();
 		server.port = 9999;
 		server.users = users;
+		server.sharedroot = sroot.getRoot();
 		System.out.println("Now running personal server in the background");
 		server.start();
 
