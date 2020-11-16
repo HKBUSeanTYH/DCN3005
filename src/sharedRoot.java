@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class sharedRoot {
-	private String sharedroot;
+	String sharedroot;				//this can be public because it is a "shared" root
 	private File userData = new File("userData.txt");
 	private String users = "";
 	
@@ -78,6 +78,8 @@ public class sharedRoot {
 		
 		return users;
 	}
+	
+	public String getRoot() {return this.sharedroot;}
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
