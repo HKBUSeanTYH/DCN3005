@@ -35,12 +35,19 @@ public class TCPClient extends Thread {
 		}
 		
 		System.out.println("Log in success!\n");
+		receive(in);			//receive user actions for user's access level
 		
-		receive(in);
+		boolean loggedIn = true;
 		
-		String cmd = scanner.nextLine();
-		sendCmd(cmd, out, in);
-		receive(in);
+		while (loggedIn) {
+			String cmd = scanner.nextLine();
+			sendCmd(cmd, out, in);
+			if (!cmd.equals("3")) {
+				receive(in);
+			}else {		//if uploading or downloading files, use a different receive method
+				
+			}
+		}
 		
 	}
 
@@ -113,10 +120,9 @@ public class TCPClient extends Thread {
 				in.read(buffer, 0, len);	//read into the buffer the len amount of data from the inputstream
 				
 				String result = (new String(buffer, 0, len));
-				if (result.equals("end")) {
+				if (result.equals("end")) {					//end of the returned result
 					break;
 				}
-				System.out.println(result);
 			}
 		} catch (IOException ex) {
 			System.out.println("Server connection dropped");
