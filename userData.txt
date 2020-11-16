@@ -1,4 +1,4 @@
-sharedRoot: D:\seant\2uniFiles
+sharedRoot: D:\seant\2uniFiles SeanTYH
 admin 123456 full 
 sean 654321 partial 
 oshan 123321 partial 

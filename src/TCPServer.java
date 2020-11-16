@@ -14,6 +14,7 @@ import java.net.Socket;
 
 public class TCPServer extends Thread {
 	
+	String servernm;
 	String sharedroot;
 	int port;
 	Users users;			//pass value to this global variable in startup
@@ -66,7 +67,7 @@ public class TCPServer extends Thread {
 			
 			String access = users.getAccess();
 			
-			if (access.equalsIgnoreCase("all")) {
+			if (access.trim().equalsIgnoreCase("basic")) {
 				sendOut("Your available actions: ", out);
 				sendOut("1. Read file list", out);
 				sendOut("3. Upload and download files", out);
@@ -76,7 +77,7 @@ public class TCPServer extends Thread {
 				
 				String usercmd = receiveCmd(in);
 				System.out.println("Received cmd: "+usercmd);			//test if receive cmd
-			}else if (access.equalsIgnoreCase("partial")) {
+			}else if (access.trim().equalsIgnoreCase("partial")) {
 				sendOut("Your available actions: ", out);
 				sendOut("1. Read file list", out);
 				sendOut("2. Create sub-directory", out);
@@ -88,7 +89,7 @@ public class TCPServer extends Thread {
 				
 				String usercmd = receiveCmd(in);
 				System.out.println("Received cmd: "+usercmd);			//test if receive cmd
-			}else if (access.equalsIgnoreCase("full")) {
+			}else if (access.trim().equalsIgnoreCase("full")) {
 				sendOut("Your available actions: ", out);
 				sendOut("1. Read file list", out);
 				sendOut("2. Create sub-directory", out);

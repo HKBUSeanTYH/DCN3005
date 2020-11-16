@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 public class sharedRoot {
 	String sharedroot;				//this can be public because it is a "shared" root
+	String servernm;
 	private File userData = new File("userData.txt");
 	private String users = "";
 	
@@ -18,7 +19,10 @@ public class sharedRoot {
 			Scanner scanner = new Scanner(System.in);
 			sharedroot = "sharedRoot: ";
 			FileOutputStream out = new FileOutputStream(userData);
-
+			
+			System.out.println("Please provide your server name");
+			servernm = scanner.nextLine();
+			
 			System.out.println("Please provide the path to your shared directory");
 			boolean isDir = false;
 
@@ -29,19 +33,18 @@ public class sharedRoot {
 				if (!sfile.isDirectory()) {		//only accept directory
 					System.out.println("The path provided is not a directory!");
 				} else {
-					sharedroot = sharedroot + spath + "\n";
+					sharedroot = sharedroot + spath + " "+servernm+"\n";
 					out.write(sharedroot.getBytes());
 					System.out.println("Your shared directory path has been saved!");
 					isDir = true;
 				}
-				
 			}
 			
 			//some basic users that are initiated on setup
-			out.write("admin 123456 full \n".getBytes());
-			out.write("sean 654321 partial \n".getBytes());
-			out.write("oshan 123321 partial \n".getBytes());
-			out.write("client 111111 basic \n".getBytes());
+			out.write("admin 123456 full\n".getBytes());
+			out.write("sean 654321 partial\n".getBytes());
+			out.write("oshan 123321 partial\n".getBytes());
+			out.write("client 111111 basic\n".getBytes());
 			
 			//implementation of simplified access control
 			//owner --> full; group -->partial; universe --> basic
@@ -58,7 +61,12 @@ public class sharedRoot {
 			String line = in.nextLine();
 			String[] lineElem = line.split(" ");
 			
-			if (lineElem[0].equals("sharedRoot:")) {continue;}
+			if (lineElem[0].equals("sharedRoot:")) {
+				sharedroot = lineElem[1]; 
+				for (int i=2; i<lineElem.length; i++) {
+					servernm = servernm +" "+lineElem[i];
+				}
+			}
 			users = users + line+" ";
 		}
 	}
@@ -80,6 +88,7 @@ public class sharedRoot {
 	}
 	
 	public String getRoot() {return this.sharedroot;}
+	public String getServer() {return this.servernm;}
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub

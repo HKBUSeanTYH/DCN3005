@@ -20,6 +20,7 @@ public class StartUp {
 		server.port = 9999;
 		server.users = users;
 		server.sharedroot = sroot.getRoot();
+		server.servernm = sroot.getServer();
 		System.out.println("Now running personal server in the background");
 		server.start();
 

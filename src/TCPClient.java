@@ -42,11 +42,14 @@ public class TCPClient extends Thread {
 		while (loggedIn) {
 			String cmd = scanner.nextLine();
 			sendCmd(cmd, out, in);
-			if (!cmd.equals("3")) {
-				receive(in);
-			}else {		//if uploading or downloading files, use a different receive method
-				
-			}
+//			if (!cmd.equals("3")) {
+//				receive(in);
+//			}else if(cmd.equalsIgnoreCase("quit")) {
+//				loggedIn = false;
+//				break;
+//			}else {		//if uploading or downloading files, use a different receive method
+//				
+//			}
 		}
 		
 	}
@@ -123,6 +126,7 @@ public class TCPClient extends Thread {
 				if (result.equals("end")) {					//end of the returned result
 					break;
 				}
+				System.out.println(result);
 			}
 		} catch (IOException ex) {
 			System.out.println("Server connection dropped");
