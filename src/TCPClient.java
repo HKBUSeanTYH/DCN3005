@@ -96,7 +96,6 @@ public class TCPClient extends Thread {
 				if (result.equalsIgnoreCase("success")) {				//write a method to check if the login is success
 					return true;
 				}else {
-					//System.out.println("Username and password not accepted");						//how to terminate system or terminate login??
 					return false;
 				}
 			}
@@ -126,7 +125,7 @@ public class TCPClient extends Thread {
 				if (result.equals("end")) {					//end of the returned result
 					break;
 				}
-				System.out.println(result);
+				System.out.println(result);		//print out the result
 			}
 		} catch (IOException ex) {
 			System.out.println("Server connection dropped");

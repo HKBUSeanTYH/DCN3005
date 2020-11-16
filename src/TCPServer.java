@@ -134,7 +134,8 @@ public class TCPServer extends Thread {
 		out.write(str.getBytes(), 0, str.length());
 	}
 	
-	public String receiveCmd(DataInputStream in) throws IOException {			//receivedCmd doesnt need to return String we can take input of access level and handle the methods for each user inside
+	public String receiveCmd(DataInputStream in) throws IOException {			
+		//receivedCmd doesnt need to return String we can take input of access level and handle the methods for each user inside
 		byte[] buffer = new byte[1024];
 		String cmd ="";
 		try {
