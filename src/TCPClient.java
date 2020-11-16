@@ -34,13 +34,13 @@ public class TCPClient extends Thread {
 			}			
 		}
 		
-		System.out.println("Log in success!");
+		System.out.println("Log in success!\n");
 		
 		receive(in);
 		
 		String cmd = scanner.nextLine();
-		
 		sendCmd(cmd, out, in);
+		receive(in);
 		
 	}
 
@@ -81,12 +81,12 @@ public class TCPClient extends Thread {
 				in.read(buffer, 0, len);	//read into the buffer the len amount of data from the inputstream
 				
 				String result = (new String(buffer, 0, len));
-				System.out.println(result);
+				//System.out.println(result);
 				
 				if (result.equalsIgnoreCase("success")) {				//write a method to check if the login is success
 					return true;
 				}else {
-					System.out.println("Username and password not accepted");						//how to terminate system or terminate login??
+					//System.out.println("Username and password not accepted");						//how to terminate system or terminate login??
 					return false;
 				}
 			}

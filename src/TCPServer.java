@@ -73,6 +73,8 @@ public class TCPServer extends Thread {
 				sendOut("\nPlease input a number", out);
 				sendOut("end", out);
 				
+				String usercmd = receiveCmd(in);
+				System.out.println("Received cmd: "+usercmd);			//test if receive cmd
 			}else if (access.equalsIgnoreCase("partial")) {
 				sendOut("Your available actions: ", out);
 				sendOut("1. Read file list", out);
@@ -83,6 +85,8 @@ public class TCPServer extends Thread {
 				sendOut("\nPlease input a number", out);
 				sendOut("end", out);
 				
+				String usercmd = receiveCmd(in);
+				System.out.println("Received cmd: "+usercmd);			//test if receive cmd
 			}else if (access.equalsIgnoreCase("full")) {
 				sendOut("Your available actions: ", out);
 				sendOut("1. Read file list", out);
@@ -94,6 +98,9 @@ public class TCPServer extends Thread {
 				sendOut("7. Read file information", out);
 				sendOut("\nPlease input a number", out);
 				sendOut("end", out);
+				
+				String usercmd = receiveCmd(in);
+				System.out.println("Received cmd: "+usercmd);			//test if receive cmd
 			}
 			
 //			System.out.print("Downloading file %s " + name);
@@ -115,8 +122,8 @@ public class TCPServer extends Thread {
 //			
 //			in.close();
 //			out.close();
-		} catch (IOException e) {
-			System.err.println("unable to download file.");
+		} catch (Exception e) {
+			System.err.println("Failure in logging in");
 		}
 	}
 	
@@ -125,19 +132,27 @@ public class TCPServer extends Thread {
 		out.write(str.getBytes(), 0, str.length());
 	}
 	
-	public void receiveCmd(DataInputStream in) throws IOException {
+	public String receiveCmd(DataInputStream in) throws IOException {			//receivedCmd doesnt need to return String we can take input of access level and handle the methods for each user inside
 		byte[] buffer = new byte[1024];
+		String cmd ="";
 		try {
 			while (true) {
 				int len = in.readInt();
 				in.read(buffer, 0, len);	//read into the buffer the len amount of data from the inputstream
 				
-				String result = (new String(buffer, 0, len));
+				cmd = (new String(buffer, 0, len));
+				return cmd;
 			}
 		} catch (IOException ex) {
 			System.out.println("Server connection dropped");
 			System.exit(-1);
 		}
+		
+		return cmd;
+	}
+	
+	public void executeCmd() {
+		
 	}
 
 	public static void main(String[] args) {
