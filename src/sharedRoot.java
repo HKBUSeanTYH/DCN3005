@@ -62,9 +62,13 @@ public class sharedRoot {
 			String[] lineElem = line.split(" ");
 			
 			if (lineElem[0].equals("sharedRoot:")) {
-				sharedroot = lineElem[1]; 
+				sharedroot = lineElem[1];
 				for (int i=2; i<lineElem.length; i++) {
-					servernm = servernm +" "+lineElem[i];
+					if (i == 2) {
+						servernm = lineElem[i];
+					}else {
+						servernm = servernm +" "+lineElem[i];
+					}
 				}
 			}
 			users = users + line+" ";
