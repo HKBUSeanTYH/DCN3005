@@ -26,6 +26,8 @@ public class StartUp {
 
 		Thread.sleep(100);			//delays StartUp so that the server thread finish printing out messages
 		
+		//C:\Users\seant\Downloads
+		
 		while (true) {
 			try {
 				System.out.println("Please input Server IP: "); // 192.168.50.245

@@ -12,7 +12,7 @@ public class TCPClient extends Thread {
 	String serverIP;
 	int port;
 	
-	public void Client() throws IOException{
+	public void Client() throws IOException, InterruptedException{
 		Scanner scanner = new Scanner(System.in); // take user input and send to server
 		boolean login = false;
 		
@@ -24,6 +24,8 @@ public class TCPClient extends Thread {
 			socket = new Socket(serverIP, port);
 			out = new DataOutputStream(socket.getOutputStream());
 			in = new DataInputStream(socket.getInputStream());
+			
+			Thread.sleep(100);
 			
 			System.out.println("Please input your username");
 			String username = scanner.nextLine();

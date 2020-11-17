@@ -215,6 +215,10 @@ public class TCPServer extends Thread {
 			}
 
 			System.out.print("Downloading file %s " + name);
+			System.out.println(name);
+//			String[] nameTokens = name.trim().split("\\");			//for some reason, the name of file is already parsed from the path provided...?
+//			name = nameTokens[nameTokens.length-1];			//from the client path given, take the name of the file only
+			
 
 			long size = in.readLong();
 			System.out.printf("(%d)", size);
@@ -229,6 +233,7 @@ public class TCPServer extends Thread {
 				size -= len;
 				System.out.print(".");
 			}
+			out.close();
 			System.out.println("\nDownload completed.");
 		} catch (IOException e) {
 			System.err.println("unable to download file.");
