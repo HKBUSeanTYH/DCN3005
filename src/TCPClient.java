@@ -173,7 +173,13 @@ public class TCPClient extends Thread {
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
-		
+//		String shared = "D:\\seant\\2uniFiles";
+//		String current2 = "D:\\seant\\2uniFiles";
+//		String current = "D:\\seant";		
+//		
+//		if (current2.contains(shared)) {
+//			System.out.println("Yes");
+//		}
 	}
 	
 	public void run() {
