@@ -1,5 +1,8 @@
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
@@ -40,44 +43,48 @@ public class TCPClient extends Thread {
 		
 		while (loggedIn) {
 			String cmd = scanner.nextLine();
-			sendCmd(cmd, out, in);
-			receive(in);
-//			if (!cmd.equals("3")) {
-//				receive(in);
-//			}else if(cmd.equalsIgnoreCase("quit")) {
-//				loggedIn = false;
-//				break;
-//			}else {		//if uploading or downloading files, use a different receive method
-//				
-//			}
+			sendCmd(cmd, out);
+
+			String[] cmdTokens = cmd.trim().split(" ");
+			if (cmdTokens[0].equals("")) {
+				System.err.println("No input received!\n");
+			}else {
+				switch (cmdTokens[0].toLowerCase()) {
+				case "dir":
+					receive(in);
+					break;
+				case "mkdir":
+					break;
+				case "upl":
+					String name ="";
+					for (int i=1; i<cmdTokens.length; i++) {
+						if (i == 1) {
+							name = cmdTokens[i];
+						}else {
+							name += " "+cmdTokens[i];
+						}
+					}
+					upload(name, out);
+					break;
+				case "dwl":
+					break;
+				case "del":
+					break;
+				case "deldir":
+					break;
+				case "rename":
+					break;
+				case "read":
+					break;
+				default: 
+					System.out.println("Please input a valid command");
+				}
+			}
+			
+			receive(in);			//receive next set of actions
 		}
 		
 	}
-
-//	public TCPClient(String serverIP, int port) throws IOException{
-//		
-//		Scanner scanner = new Scanner(System.in); // take user input and send to server
-//		boolean login = false;
-//		
-//		while (!login) {
-//			Socket socket = new Socket(serverIP, port);
-//			DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-//			DataInputStream in = new DataInputStream(socket.getInputStream());
-//			
-//			System.out.println("Please input your username");
-//			String username = scanner.nextLine();
-//			System.out.println("Please input your password");
-//			String pw = scanner.nextLine();
-//			System.out.println("Connecting to server...");
-//			
-//			if (sendLogin(username, pw, out, in)) {		//if login method returns true break out of while loop (maybe change to a do-while loop?)
-//				login = true;
-//			}			
-//		}
-//		
-//		System.out.println("Log in success!");
-//		
-//	}
 	
 	public boolean sendLogin(String username, String pw, DataOutputStream out, DataInputStream in) throws IOException {
 		String send = username+" "+pw;
@@ -107,10 +114,9 @@ public class TCPClient extends Thread {
 		return false;
 	}
 
-	public void sendCmd(String str, DataOutputStream out, DataInputStream in) throws IOException {
+	public void sendCmd(String str, DataOutputStream out) throws IOException {
 		out.writeInt(str.length());
 		out.write(str.getBytes(), 0, str.length());
-		receive(in);
 	}
 	
 	//we need a way to receive the socket's inputstream (DataInputStream input = new DataInputStream(socket.getInputStream())
@@ -131,6 +137,36 @@ public class TCPClient extends Thread {
 			System.out.println("Server connection dropped");
 			System.exit(-1);
 		}
+	}
+	
+	public void upload(String filename, DataOutputStream out) throws IOException {
+		File fname = new File(filename);
+		if (fname.exists()) {
+			try {
+				FileInputStream in = new FileInputStream(fname);
+				
+				byte[] buffer = new byte[1024];
+				
+				out.writeInt(fname.getName().length());
+				out.write(fname.getName().getBytes(), 0, fname.getName().length());
+				
+				long size = fname.length();
+				out.writeLong(size);
+				
+				while(size >0) {
+					int len = in.read(buffer, 0, buffer.length);
+					out.write(buffer, 0, len);
+					size -= len;
+				}
+			}catch (Exception e) {
+				System.out.println("Error occurred in uploading file to server. Please try again");
+			}
+		}else {
+			System.out.println("File not found");
+			String quit = "404 not found";
+			sendCmd(quit, out);
+		}
+		
 	}
 
 	public static void main(String[] args) throws IOException {

@@ -1,6 +1,7 @@
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
@@ -16,12 +17,14 @@ public class TCPServer extends Thread {
 	
 	String servernm;
 	String sharedroot;
+	private String currentDir;
 	int port;
 	Users users;			//pass value to this global variable in startup
 	
 	
 	
 	public void Server() throws IOException{
+		currentDir = sharedroot;
 		ServerSocket serverSocket = new ServerSocket(port);
 		System.out.println(servernm+" listening at port " + port);
 		while(true) {
@@ -100,7 +103,7 @@ public class TCPServer extends Thread {
 				
 				String usercmd = receiveCmd(in);
 				System.out.println("Received cmd: "+usercmd);			//test if receive cmd
-				interpretCmd(usercmd, out);
+				interpretCmd(usercmd, out, in);
 			}
 			
 //			System.out.print("Downloading file %s " + name);
@@ -152,7 +155,7 @@ public class TCPServer extends Thread {
 		return cmd;
 	}
 	
-	public void interpretCmd(String cmd, DataOutputStream out) throws IOException {
+	public void interpretCmd(String cmd, DataOutputStream out, DataInputStream in) throws IOException {
 		String[] cmdTokens = cmd.trim().split(" ");
 		
 		if (cmdTokens[0].equals("")) {
@@ -165,6 +168,8 @@ public class TCPServer extends Thread {
 			case "mkdir":
 				break;
 			case "upl":
+				//System.out.println("upload requested");          //debugging purposes
+				download(in);
 				break;
 			case "dwl":
 				break;
@@ -197,6 +202,39 @@ public class TCPServer extends Thread {
 		}
 		return;
 	}
+	
+	public void download(DataInputStream in) {			//receive upload (one side upload, other side download)
+		byte[] buffer = new byte[1024];
+		try {
+			int nameLen = in.readInt();
+			in.read(buffer, 0, nameLen);			
+			String name = new String(buffer, 0, nameLen);
+			
+			if (name.equals("404 not found")) {
+				return;
+			}
+
+			System.out.print("Downloading file %s " + name);
+
+			long size = in.readLong();
+			System.out.printf("(%d)", size);
+
+			name = currentDir+"/"+name;
+			File file = new File(name);
+			FileOutputStream out = new FileOutputStream(file);
+
+			while(size > 0) {
+				int len = in.read(buffer, 0, buffer.length);
+				out.write(buffer, 0, len);
+				size -= len;
+				System.out.print(".");
+			}
+			System.out.println("\nDownload completed.");
+		} catch (IOException e) {
+			System.err.println("unable to download file.");
+		}
+	}
+	
 	public static void main(String[] args) {
 
 		//please do not delete this.
