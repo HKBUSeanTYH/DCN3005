@@ -74,9 +74,6 @@ public class TCPServer extends Thread {
 				sendOut("7. Read file information [READ] [name]", out);
 				sendOut("\nPlease input command", out);
 				sendOut("end", out);
-				
-				String usercmd = receiveCmd(in);
-				System.out.println("Received cmd: "+usercmd);			//test if receive cmd
 			}else if (access.trim().equalsIgnoreCase("partial")) {
 				sendOut("Your available actions: ", out);
 				sendOut("1. Read file list [DIR]", out);
@@ -86,9 +83,6 @@ public class TCPServer extends Thread {
 				sendOut("7. Read file information [READ] [name]", out);
 				sendOut("\nPlease input command", out);
 				sendOut("end", out);
-				
-				String usercmd = receiveCmd(in);
-				System.out.println("Received cmd: "+usercmd);			//test if receive cmd
 			}else if (access.trim().equalsIgnoreCase("full")) {
 				sendOut("Your available actions: ", out);
 				sendOut("1. Read file list [DIR]", out);
@@ -100,9 +94,36 @@ public class TCPServer extends Thread {
 				sendOut("7. Read file information [READ] [name]", out);
 				sendOut("\nPlease input command", out);
 				sendOut("end", out);
-				
-				String usercmd = receiveCmd(in);
-				System.out.println("Received cmd: "+usercmd);			//test if receive cmd
+			}
+			
+			String usercmd = receiveCmd(in);
+			System.out.println("Received cmd: "+usercmd);			//test if receive cmd
+			
+			String[] cmdTokens = usercmd.trim().split(" ");
+			
+			if (cmdTokens.length == 0) {
+				System.out.println("No input received!");
+			}else {
+				switch (cmdTokens[0].toLowerCase()) {
+				case "dir":
+					break;
+				case "mkdir":
+					break;
+				case "upl":
+					break;
+				case "dwl":
+					break;
+				case "del":
+					break;
+				case "deldir":
+					break;
+				case "rename":
+					break;
+				case "read":
+					break;
+				default: 
+					System.out.println("Please input a valid command");
+				}
 			}
 			
 //			System.out.print("Downloading file %s " + name);
