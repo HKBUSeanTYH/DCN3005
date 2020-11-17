@@ -150,7 +150,7 @@ public class TCPClient extends Thread {
 				byte[] buffer = new byte[1024];
 				
 				out.writeInt(fname.getName().length());
-				out.write(fname.getName().getBytes(), 0, fname.getName().length());
+				out.write(fname.getName().getBytes(), 0, fname.getName().length());			//writes file name only, not including the path
 				
 				long size = fname.length();
 				out.writeLong(size);
