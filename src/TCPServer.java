@@ -66,63 +66,66 @@ public class TCPServer extends Thread {
 			}
 			
 			String access = users.getAccess();
+			boolean connected = true;
 			
-			if (access.trim().equalsIgnoreCase("basic")) {
-				sendOut("Your available actions: ", out);
-				sendOut("1. Read file list [DIR]", out);
-				sendOut("3. Upload and download files [UPL]/[DWL] [name]", out);
-				sendOut("7. Read file information [READ] [name]", out);
-				sendOut("\nPlease input command", out);
-				sendOut("end", out);
-			}else if (access.trim().equalsIgnoreCase("partial")) {
-				sendOut("Your available actions: ", out);
-				sendOut("1. Read file list [DIR]", out);
-				sendOut("2. Create sub-directory [MKDIR] [name]", out);
-				sendOut("3. Upload and download files [UPL]/[DWL] [name]", out);
-				sendOut("6. Change file/target name [RENAME] [name] [new name]", out);
-				sendOut("7. Read file information [READ] [name]", out);
-				sendOut("\nPlease input command", out);
-				sendOut("end", out);
-			}else if (access.trim().equalsIgnoreCase("full")) {
-				sendOut("Your available actions: ", out);
-				sendOut("1. Read file list [DIR]", out);
-				sendOut("2. Create sub-directory [MKDIR][name]", out);
-				sendOut("3. Upload and download files [UPL]/[DWL] [name]", out);
-				sendOut("4. Delete files [DEL] [name]", out);
-				sendOut("5. Delete sub-directory [DELDIR] [name]", out);
-				sendOut("6. Change file/target name [RENAME] [name] [new name]", out);
-				sendOut("7. Read file information [READ] [name]", out);
-				sendOut("\nPlease input command", out);
-				sendOut("end", out);
-			}
-			
-			String usercmd = receiveCmd(in);
-			System.out.println("Received cmd: "+usercmd);			//test if receive cmd
-			
-			String[] cmdTokens = usercmd.trim().split(" ");
-			
-			if (cmdTokens.length == 0) {
-				System.out.println("No input received!");
-			}else {
-				switch (cmdTokens[0].toLowerCase()) {
-				case "dir":
-					break;
-				case "mkdir":
-					break;
-				case "upl":
-					break;
-				case "dwl":
-					break;
-				case "del":
-					break;
-				case "deldir":
-					break;
-				case "rename":
-					break;
-				case "read":
-					break;
-				default: 
-					System.out.println("Please input a valid command");
+			while (connected) {
+				if (access.trim().equalsIgnoreCase("basic")) {
+					sendOut("Your available actions: ", out);
+					sendOut("1. Read file list [DIR]", out);
+					sendOut("3. Upload and download files [UPL]/[DWL] [name]", out);
+					sendOut("7. Read file information [READ] [name]", out);
+					sendOut("\nPlease input command", out);
+					sendOut("end", out);
+				}else if (access.trim().equalsIgnoreCase("partial")) {
+					sendOut("Your available actions: ", out);
+					sendOut("1. Read file list [DIR]", out);
+					sendOut("2. Create sub-directory [MKDIR] [name]", out);
+					sendOut("3. Upload and download files [UPL]/[DWL] [name]", out);
+					sendOut("6. Change file/target name [RENAME] [name] [new name]", out);
+					sendOut("7. Read file information [READ] [name]", out);
+					sendOut("\nPlease input command", out);
+					sendOut("end", out);
+				}else if (access.trim().equalsIgnoreCase("full")) {
+					sendOut("Your available actions: ", out);
+					sendOut("1. Read file list [DIR]", out);
+					sendOut("2. Create sub-directory [MKDIR][name]", out);
+					sendOut("3. Upload and download files [UPL]/[DWL] [name]", out);
+					sendOut("4. Delete files [DEL] [name]", out);
+					sendOut("5. Delete sub-directory [DELDIR] [name]", out);
+					sendOut("6. Change file/target name [RENAME] [name] [new name]", out);
+					sendOut("7. Read file information [READ] [name]", out);
+					sendOut("\nPlease input command", out);
+					sendOut("end", out);
+				}
+				
+				String usercmd = receiveCmd(in);
+				System.out.println("Received cmd: "+usercmd);			//test if receive cmd
+				
+				String[] cmdTokens = usercmd.trim().split(" ");
+				
+				if (cmdTokens[0].equals("")) {
+					System.err.println("No input received!\n");
+				}else {
+					switch (cmdTokens[0].toLowerCase()) {
+					case "dir":
+						break;
+					case "mkdir":
+						break;
+					case "upl":
+						break;
+					case "dwl":
+						break;
+					case "del":
+						break;
+					case "deldir":
+						break;
+					case "rename":
+						break;
+					case "read":
+						break;
+					default: 
+						System.out.println("Please input a valid command");
+					}
 				}
 			}
 			

@@ -25,19 +25,26 @@ public class StartUp {
 		server.start();
 
 		Thread.sleep(100);			//delays StartUp so that the server thread finish printing out messages
-		System.out.println("Please input Server IP: "); // 192.168.50.245
-		String ip = in.nextLine().trim();
+		
+		while (true) {
+			try {
+				System.out.println("Please input Server IP: "); // 192.168.50.245
+				String ip = in.nextLine().trim();
 
-		// do we set only one port for server? ie hard code server port as xxxxx?
-		System.out.print("Port no: ");
-		int port = Integer.parseInt(in.nextLine());
+				// do we set only one port for server? ie hard code server port as xxxxx?
+				System.out.print("Port no: ");
+				int port = Integer.parseInt(in.nextLine());
 
-		TCPClient client = new TCPClient();
-		client.serverIP = ip;
-		client.port = port;
+				TCPClient client = new TCPClient();
+				client.serverIP = ip;
+				client.port = port;
 
-		client.start();
-		client.join();
+				client.start();
+				client.join();
+			}catch (Exception e) {
+				System.err.println("Bad Input");
+			}
+		}
 
 //		TCPServer server = new TCPServer(12345, users);	//this refers to this pc's self server action with its own list of accepted users
 //		TCPClient client = new TCPClient(ip, port);	//this is to act as a client and connect to other peoples server
@@ -47,7 +54,7 @@ public class StartUp {
 
 		// need to put UDP and TCP on startup codes
 
-		in.close();
+		//in.close();
 	}
 
 }

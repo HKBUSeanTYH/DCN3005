@@ -41,6 +41,7 @@ public class TCPClient extends Thread {
 		while (loggedIn) {
 			String cmd = scanner.nextLine();
 			sendCmd(cmd, out, in);
+			receive(in);
 //			if (!cmd.equals("3")) {
 //				receive(in);
 //			}else if(cmd.equalsIgnoreCase("quit")) {
