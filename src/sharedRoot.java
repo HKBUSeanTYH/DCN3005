@@ -18,23 +18,27 @@ public class sharedRoot {
 			//if not, create and note down shared root
 			Scanner scanner = new Scanner(System.in);
 			sharedroot = "sharedRoot: ";
+			servernm = "servernm: ";
 			FileOutputStream out = new FileOutputStream(userData);
 			
 			System.out.println("Please provide your server name");
-			servernm = scanner.nextLine();
+			String svrName = scanner.nextLine();
+			servernm = servernm + svrName+"\n";
 			
-			System.out.println("Please provide the path to your shared directory");
 			boolean isDir = false;
 
 			while (!isDir) {
+				System.out.println("Please provide the path to your shared directory");
 				String spath = scanner.nextLine();
+				String[] spathTokens = spath.trim().split(" ");
 				File sfile = new File(spath);
 
 				if (!sfile.isDirectory()) {		//only accept directory
 					System.out.println("The path provided is not a directory!");
-				} else {
-					sharedroot = sharedroot + spath + " "+servernm+"\n";
+				}else {
+					sharedroot = sharedroot + spath + "\n";
 					out.write(sharedroot.getBytes());
+					out.write(servernm.getBytes());
 					System.out.println("Your shared directory path has been saved!");
 					isDir = true;
 				}
@@ -62,17 +66,26 @@ public class sharedRoot {
 			String[] lineElem = line.split(" ");
 			
 			if (lineElem[0].equals("sharedRoot:")) {
-				sharedroot = lineElem[1];
-				for (int i=2; i<lineElem.length; i++) {
-					if (i == 2) {
+				for (int i=1; i<lineElem.length; i++) {
+					if (i == 1) {
+						sharedroot = lineElem[i];
+					}else {
+						sharedroot = sharedroot +" "+lineElem[i];
+					}
+				}
+			}else if (lineElem[0].equals("servernm:")) {
+				for (int i=1; i<lineElem.length; i++) {
+					if (i == 1) {
 						servernm = lineElem[i];
 					}else {
 						servernm = servernm +" "+lineElem[i];
 					}
 				}
+			}else{
+				users = users + line+" ";
 			}
-			users = users + line+" ";
 		}
+		//System.out.println(users);
 	}
 	
 	public Users createUsers() throws IOException {
@@ -85,6 +98,7 @@ public class sharedRoot {
 			String[] lineElem = line.split(" ");
 			
 			if (lineElem[0].equals("sharedRoot:")) {continue;}
+			if (lineElem[0].equals("servernm:")) {continue;}
 			users.add(lineElem[0], lineElem[1], lineElem[2]); //add(user name, user password)
 		}
 		

@@ -100,33 +100,7 @@ public class TCPServer extends Thread {
 				
 				String usercmd = receiveCmd(in);
 				System.out.println("Received cmd: "+usercmd);			//test if receive cmd
-				
-				String[] cmdTokens = usercmd.trim().split(" ");
-				
-				if (cmdTokens[0].equals("")) {
-					System.err.println("No input received!\n");
-				}else {
-					switch (cmdTokens[0].toLowerCase()) {
-					case "dir":
-						break;
-					case "mkdir":
-						break;
-					case "upl":
-						break;
-					case "dwl":
-						break;
-					case "del":
-						break;
-					case "deldir":
-						break;
-					case "rename":
-						break;
-					case "read":
-						break;
-					default: 
-						System.out.println("Please input a valid command");
-					}
-				}
+				interpretCmd(usercmd, out);
 			}
 			
 //			System.out.print("Downloading file %s " + name);
@@ -149,7 +123,7 @@ public class TCPServer extends Thread {
 //			in.close();
 //			out.close();
 		} catch (Exception e) {
-			System.err.println("Failure in logging in");
+			System.err.println("Server Error");
 		}
 	}
 	
@@ -178,10 +152,51 @@ public class TCPServer extends Thread {
 		return cmd;
 	}
 	
-	public void executeCmd(String cmd, DataOutputStream out) {
+	public void interpretCmd(String cmd, DataOutputStream out) throws IOException {
+		String[] cmdTokens = cmd.trim().split(" ");
 		
+		if (cmdTokens[0].equals("")) {
+			System.err.println("No input received!\n");
+		}else {
+			switch (cmdTokens[0].toLowerCase()) {
+			case "dir":
+				directory(out);
+				break;
+			case "mkdir":
+				break;
+			case "upl":
+				break;
+			case "dwl":
+				break;
+			case "del":
+				break;
+			case "deldir":
+				break;
+			case "rename":
+				break;
+			case "read":
+				break;
+			default: 
+				System.out.println("Please input a valid command");
+			}
+		}
 	}
-
+	
+	public void directory(DataOutputStream out) throws IOException {
+		File dFile = new File(sharedroot);
+		if (dFile.exists()) {
+			String[] files = dFile.list();
+			
+			for (String file : files) {
+				sendOut(file, out);		
+			}
+			sendOut("end", out);
+		}else {
+//			System.err.println("Error in sharedroot directory");
+			sendOut("Error in sharedroot directory", out);
+		}
+		return;
+	}
 	public static void main(String[] args) {
 
 		//please do not delete this.
