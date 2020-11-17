@@ -23,7 +23,9 @@ public class sharedRoot {
 			
 			System.out.println("Please provide your server name");
 			String svrName = scanner.nextLine();
-			servernm = servernm + svrName+"\n";
+			servernm = servernm + svrName+"\n";		
+			//having separate line for servernm and sharedroot allows us to have whitespace inside the sharedroot
+			//ie. some path has whitespace inside the path
 			
 			boolean isDir = false;
 
