@@ -23,7 +23,7 @@ public class TCPServer extends Thread {
 	
 	public void Server() throws IOException{
 		ServerSocket serverSocket = new ServerSocket(port);
-		System.out.println("Listening at port " + port);
+		System.out.println(servernm+" listening at port " + port);
 		while(true) {
 			Socket clientSocket = serverSocket.accept();
 			System.out.printf("Connected client (%s:%d)\n", clientSocket.getInetAddress(), clientSocket.getPort());
@@ -69,36 +69,36 @@ public class TCPServer extends Thread {
 			
 			if (access.trim().equalsIgnoreCase("basic")) {
 				sendOut("Your available actions: ", out);
-				sendOut("1. Read file list", out);
-				sendOut("3. Upload and download files", out);
-				sendOut("7. Read file information", out);
-				sendOut("\nPlease input a number", out);
+				sendOut("1. Read file list [DIR]", out);
+				sendOut("3. Upload and download files [UPL]/[DWL] [name]", out);
+				sendOut("7. Read file information [READ] [name]", out);
+				sendOut("\nPlease input command", out);
 				sendOut("end", out);
 				
 				String usercmd = receiveCmd(in);
 				System.out.println("Received cmd: "+usercmd);			//test if receive cmd
 			}else if (access.trim().equalsIgnoreCase("partial")) {
 				sendOut("Your available actions: ", out);
-				sendOut("1. Read file list", out);
-				sendOut("2. Create sub-directory", out);
-				sendOut("3. Upload and download files", out);
-				sendOut("6. Change file/target name", out);
-				sendOut("7. Read file information", out);
-				sendOut("\nPlease input a number", out);
+				sendOut("1. Read file list [DIR]", out);
+				sendOut("2. Create sub-directory [MKDIR] [name]", out);
+				sendOut("3. Upload and download files [UPL]/[DWL] [name]", out);
+				sendOut("6. Change file/target name [RENAME] [name] [new name]", out);
+				sendOut("7. Read file information [READ] [name]", out);
+				sendOut("\nPlease input command", out);
 				sendOut("end", out);
 				
 				String usercmd = receiveCmd(in);
 				System.out.println("Received cmd: "+usercmd);			//test if receive cmd
 			}else if (access.trim().equalsIgnoreCase("full")) {
 				sendOut("Your available actions: ", out);
-				sendOut("1. Read file list", out);
-				sendOut("2. Create sub-directory", out);
-				sendOut("3. Upload and download files", out);
-				sendOut("4. Delete files", out);
-				sendOut("5. Delete sub-directory", out);
-				sendOut("6. Change file/target name", out);
-				sendOut("7. Read file information", out);
-				sendOut("\nPlease input a number", out);
+				sendOut("1. Read file list [DIR]", out);
+				sendOut("2. Create sub-directory [MKDIR][name]", out);
+				sendOut("3. Upload and download files [UPL]/[DWL] [name]", out);
+				sendOut("4. Delete files [DEL] [name]", out);
+				sendOut("5. Delete sub-directory [DELDIR] [name]", out);
+				sendOut("6. Change file/target name [RENAME] [name] [new name]", out);
+				sendOut("7. Read file information [READ] [name]", out);
+				sendOut("\nPlease input command", out);
 				sendOut("end", out);
 				
 				String usercmd = receiveCmd(in);
