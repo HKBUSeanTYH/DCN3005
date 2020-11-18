@@ -87,7 +87,7 @@ public class sharedRoot {
 					}
 				}
 			}else{
-				userstring = userstring+line+" ";
+				userstring = userstring+line+"\n";
 			}
 		}
 		//System.out.println(users);
@@ -127,7 +127,7 @@ public class sharedRoot {
 		String result = name.trim() + " " +pw.trim() +" "+acc.trim();
 		out.write((result+"\n").getBytes());
 		users.add(name.trim(), pw.trim(), acc.trim());		//append to user linkedlist
-		userstring = userstring + result+" ";
+		userstring = userstring + result+"\n";
 		System.out.println("User successfully added!");
 		out.close();
 	}
@@ -149,18 +149,27 @@ public class sharedRoot {
 		out.write(s1.getBytes());
 		out.write(s2.getBytes());
 		
-		String[] userTokens = userstring.split(" ");
+		String[] userTokens = userstring.split("\n");
 		
-		for(int i=0; i<userTokens.length; i = i+3) {
+		for(int i=0; i<userTokens.length; i++) {
 			String line ="";
-			if (userTokens[i].equals(username)) {
+			String[] uservar = userTokens[i].split(" ");
+			if (userTokens[i].contains(username)) {
 				userstring = userstring.replace(userTokens[i], "");
-				userstring = userstring.replace(userTokens[i+1], "");
-				userstring = userstring.replace(userTokens[i+2], "");
 			}else {
-				line = userTokens[i] +" "+userTokens[i+1]+" "+userTokens[i+2]+"\n";
+				line = userTokens[i]+"\n";
 				out.write(line.getBytes());
 			}
+			
+			
+//			if (userTokens[i].equals(username)) {
+//				userstring = userstring.replace(userTokens[i], "");
+//				userstring = userstring.replace(userTokens[i+1], "");
+//				userstring = userstring.replace(userTokens[i+2], "");
+//			}else {
+//				line = userTokens[i] +" "+userTokens[i+1]+" "+userTokens[i+2]+"\n";
+//				out.write(line.getBytes());
+//			}
 		}
 		
 		out.flush();
@@ -176,7 +185,17 @@ public class sharedRoot {
 			
 			if (lineElem[0].equals("sharedRoot:")) {continue;}
 			if (lineElem[0].equals("servernm:")) {continue;}
-			users.add(lineElem[0], lineElem[1], lineElem[2]); //add(user name, user password)
+			String username = "";
+			
+			for (int i=0; i<lineElem.length-2;i++) {
+				if (i==0) {
+					username = lineElem[i];
+				}else {
+					username = username+" "+lineElem[i];
+				}
+			}
+			
+			users.add(username, lineElem[lineElem.length-2], lineElem[lineElem.length-1]); //add(user name, user password)
 		}
 		
 		return users;
