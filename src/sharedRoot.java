@@ -87,10 +87,10 @@ public class sharedRoot {
 					}
 				}
 			}else{
-				userstring = userstring+line+" ";
+				userstring = userstring+line+"\n";
 			}
 		}
-		//System.out.println(users);
+		//System.out.println(userstring);       //debugging
 	}
 	
 	//experimental
@@ -127,7 +127,7 @@ public class sharedRoot {
 		String result = name.trim() + " " +pw.trim() +" "+acc.trim();
 		out.write((result+"\n").getBytes());
 		users.add(name.trim(), pw.trim(), acc.trim());		//append to user linkedlist
-		userstring = userstring + result+" ";
+		userstring = userstring + result+"\n";
 		System.out.println("User successfully added!");
 		out.close();
 	}
@@ -149,19 +149,30 @@ public class sharedRoot {
 		out.write(s1.getBytes());
 		out.write(s2.getBytes());
 		
-		String[] userTokens = userstring.split(" ");
+		String[] userTokens = userstring.split("\n");
 		
-		for(int i=0; i<userTokens.length; i = i+3) {
+		for(int i=0; i<userTokens.length; i++) {
 			String line ="";
-			if (userTokens[i].equals(username)) {
-				userstring = userstring.replace(userTokens[i], "");
-				userstring = userstring.replace(userTokens[i+1], "");
-				userstring = userstring.replace(userTokens[i+2], "");
+			String line2 = "";
+			String[] tokens2 = userTokens[i].split(" ");         //users may have names with multiple words
+			
+			for (int j = 0; j<tokens2.length-2; j++) {
+				if (j==0) {
+					line2 = tokens2[j];
+				}else {
+					line2 = line2+" "+tokens2[j];
+				}
+			}
+			if (line2.equals(username)) {
+				userstring = userstring.replace((userTokens[i]+"\n"), "");		//remove from userstring so that future operations would not include removed user
 			}else {
-				line = userTokens[i] +" "+userTokens[i+1]+" "+userTokens[i+2]+"\n";
+				line = userTokens[i]+"\n";
 				out.write(line.getBytes());
 			}
 		}
+//		users.print();       //debugging purposes
+		users.remove(username);				//remove user from linked list
+		users.print();       //debuggin purposes
 		
 		out.flush();
 		out.close();
@@ -176,7 +187,17 @@ public class sharedRoot {
 			
 			if (lineElem[0].equals("sharedRoot:")) {continue;}
 			if (lineElem[0].equals("servernm:")) {continue;}
-			users.add(lineElem[0], lineElem[1], lineElem[2]); //add(user name, user password)
+			
+			String username = "";
+			for (int i=0; i<lineElem.length-2; i++) {
+				if (i==0) {
+					username = lineElem[i];
+				}else {
+					username = username +" "+lineElem[i];
+				}
+			}
+			
+			users.add(username, lineElem[lineElem.length-2], lineElem[lineElem.length-1]); //add(user name, user password)
 		}
 		
 		return users;

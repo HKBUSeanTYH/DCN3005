@@ -37,6 +37,21 @@ public class Users {
 
     }
 	
+	public void remove(String k) {
+		Node prev = this.Head;
+
+        for (int i=0; i<count; i++){
+            if (prev.next.username.equals(k)){
+                prev.next = prev.next.next;				//remove?
+                count--;
+            }else{
+                prev= prev.next;
+                continue;
+
+            }
+        }
+	}
+	
 //	public int remove(int k){        //dequeue
 //        int k = 0;
 //
