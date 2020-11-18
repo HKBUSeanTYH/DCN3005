@@ -4,3 +4,4 @@ admin 123456 full
 sean 654321 partial
 oshan 123321 partial
 client 111111 basic
+test test full

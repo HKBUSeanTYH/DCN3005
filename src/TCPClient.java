@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 public class TCPClient extends Thread {
 	
+	sharedRoot sroot;
 	String serverIP;
 	int port;
 	
@@ -77,6 +78,10 @@ public class TCPClient extends Thread {
 				case "rename":
 					break;
 				case "read":
+					break;
+				case "add":
+					sroot.addUsers();
+					//sendCmd("start", out);
 					break;
 				default: 
 					System.out.println("Please input a valid command");

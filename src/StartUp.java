@@ -40,9 +40,10 @@ public class StartUp {
 				TCPClient client = new TCPClient();
 				client.serverIP = ip;
 				client.port = port;
+				client.sroot = sroot;				//passing clients personal root to client so can add/remove users
 
 				client.start();
-				client.join();
+				client.join();       
 			}catch (Exception e) {
 				System.err.println("Bad Input");
 			}

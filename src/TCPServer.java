@@ -181,8 +181,15 @@ public class TCPServer extends Thread {
 				break;
 			case "read":
 				break;
+			case "add":
+//				String input = receiveCmd(in);
+//				if (input.equalsIgnoreCase("start")) {
+//					users.print();						//testing to see if updated linkedlist will pass onto server
+//				}
+				break;
 			default: 
-				System.out.println("Please input a valid command");
+				//System.out.println("Please input a valid command");
+				sendOut("Please input a valid command", out);
 			}
 		}
 	}

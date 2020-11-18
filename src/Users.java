@@ -101,6 +101,15 @@ public class Users {
     public int getCount(){return this.count;}
     public String loggedIn() {return this.loginName;}
     public String getAccess() {return this.loginAccess;}
+    
+    public void print() {
+    	Node prev = Head;
+    	
+    	for (int i =0; i<count; i++) {
+    		System.out.println(prev.username);
+    		prev = prev.next;
+    	}
+    }
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub

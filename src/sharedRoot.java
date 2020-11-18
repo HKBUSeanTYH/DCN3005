@@ -9,7 +9,8 @@ public class sharedRoot {
 	String sharedroot;				//this can be public because it is a "shared" root
 	String servernm;
 	private File userData = new File("userData.txt");
-	private String users = "";
+	Users users = new Users(); //initiate the linked list
+	private String userstring = "";
 	
 	public void start() throws IOException {
 
@@ -84,15 +85,40 @@ public class sharedRoot {
 					}
 				}
 			}else{
-				users = users + line+" ";
+				userstring = userstring + line+" ";
 			}
 		}
 		//System.out.println(users);
 	}
 	
-	public Users createUsers() throws IOException {
-		Users users = new Users(); //initiate the linked list
+	//experimental
+	public void addUsers() throws IOException {
+		FileOutputStream out = new FileOutputStream(userData, true);
+		Scanner in = new Scanner(System.in);
 		
+		System.out.println("Please input username");
+		String name = in.nextLine();
+		System.out.println("Please input password");
+		String pw = in.nextLine();
+		String acc = "";
+		
+		while (true) {
+			System.out.println("Please input access level");
+			acc = in.nextLine();
+			if (acc.equalsIgnoreCase("full") || acc.equalsIgnoreCase("partial") ||acc.equalsIgnoreCase("basic")) {
+				break;
+			}
+			System.out.println("Thats not a valid access level");
+		}
+		
+		
+		String result = name.trim() + " " +pw.trim() +" "+acc.trim()+"\n";
+		out.write(result.getBytes());
+		users.add(name.trim(), pw.trim(), acc.trim());		//append to user linkedlist
+		out.close();
+	}
+	
+	public Users createUsers() throws IOException {		
 		Scanner scanner = new Scanner(userData);
 		
 		while (scanner.hasNextLine()) {
