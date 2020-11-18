@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -96,8 +97,18 @@ public class sharedRoot {
 		FileOutputStream out = new FileOutputStream(userData, true);
 		Scanner in = new Scanner(System.in);
 		
-		System.out.println("Please input username");
-		String name = in.nextLine();
+		String name ="";
+		
+		while (true) {
+			System.out.println("Please input username");
+			name = in.nextLine();
+			if (userstring.contains(name.trim())) {
+				System.out.println("That username is already taken");
+			}else {
+				break;
+			}
+		}
+		
 		System.out.println("Please input password");
 		String pw = in.nextLine();
 		String acc = "";
@@ -115,6 +126,36 @@ public class sharedRoot {
 		String result = name.trim() + " " +pw.trim() +" "+acc.trim()+"\n";
 		out.write(result.getBytes());
 		users.add(name.trim(), pw.trim(), acc.trim());		//append to user linkedlist
+		System.out.println("User successfully added!");
+		out.close();
+	}
+	
+	public void removeUsers() throws IOException {
+		FileOutputStream out = new FileOutputStream(userData);
+		Scanner in = new Scanner(userstring);
+		Scanner scanner = new Scanner(System.in);
+		
+		System.out.println("Please input user to remove");
+		String username = in.nextLine();
+		
+		if (!userstring.contains(username.trim())) {
+			System.out.println("User does not exist");
+			out.close();
+			return;
+		}
+		
+		while (in.hasNextLine()) {
+			String line = in.nextLine();
+			String[] lineTokens = line.trim().split(" ");
+			if (lineTokens[0].equals(username)) {
+				userstring.replace(line, "");
+				continue;
+			}else {
+				line = line+"\n";
+				out.write(line.getBytes());
+			}
+		}
+		
 		out.close();
 	}
 	

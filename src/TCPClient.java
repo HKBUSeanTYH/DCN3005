@@ -79,9 +79,14 @@ public class TCPClient extends Thread {
 					break;
 				case "read":
 					break;
+				case "help":
+					break;
 				case "add":
 					sroot.addUsers();
 					//sendCmd("start", out);
+					break;
+				case "remove":
+					sroot.removeUsers();
 					break;
 				default: 
 					System.out.println("Please input a valid command");
