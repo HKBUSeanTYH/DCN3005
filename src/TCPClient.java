@@ -3,6 +3,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
@@ -49,6 +50,17 @@ public class TCPClient extends Thread {
 			sendCmd(cmd, out);
 
 			String[] cmdTokens = cmd.trim().split(" ");
+			String name ="";
+			
+			if (cmdTokens.length >= 2) {
+				for (int i=1; i<cmdTokens.length; i++) {
+					if (i == 1) {
+						name = cmdTokens[i];
+					}else {
+						name += " "+cmdTokens[i];
+					}
+				}
+			}
 			if (cmdTokens[0].equals("")) {
 				System.err.println("No input received!\n");
 			}else {
@@ -60,17 +72,10 @@ public class TCPClient extends Thread {
 					receive(in);    //receive success or failure to make directory/directories
 					break;
 				case "upl":
-					String name ="";
-					for (int i=1; i<cmdTokens.length; i++) {
-						if (i == 1) {
-							name = cmdTokens[i];
-						}else {
-							name += " "+cmdTokens[i];
-						}
-					}
 					upload(name, out);
 					break;
 				case "dwl":
+					download(in);
 					break;
 				case "del":
 					break;
@@ -182,7 +187,43 @@ public class TCPClient extends Thread {
 			String quit = "404 not found";
 			sendCmd(quit, out);
 		}
-		
+	}
+	
+	public void download(DataInputStream in) {			//receive upload (one side upload, other side download)
+		byte[] buffer = new byte[1024];
+		try {
+			int nameLen = in.readInt();
+			in.read(buffer, 0, nameLen);			
+			String name = new String(buffer, 0, nameLen);
+			
+			if (name.equals("404 not found")) {
+				return;
+			}
+
+			System.out.print("Downloading file %s " + name);
+			//System.out.println(name);
+//			String[] nameTokens = name.trim().split("\\");			//for some reason, the name of file is already parsed from the path provided...?
+//			name = nameTokens[nameTokens.length-1];			//from the client path given, take the name of the file only
+			
+
+			long size = in.readLong();
+			System.out.printf("(%d)", size);
+
+			//name = currentDir+"/"+name;
+			File file = new File(name);
+			FileOutputStream out = new FileOutputStream(file);
+
+			while(size > 0) {
+				int len = in.read(buffer, 0, buffer.length);
+				out.write(buffer, 0, len);
+				size -= len;
+				System.out.print(".");
+			}
+			out.close();
+			System.out.println("\nDownload completed.");
+		} catch (IOException e) {
+			System.err.println("unable to download file.");
+		}
 	}
 
 	public static void main(String[] args) throws IOException {
