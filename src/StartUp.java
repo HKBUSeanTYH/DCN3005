@@ -27,6 +27,7 @@ public class StartUp {
 		Thread.sleep(100);			//delays StartUp so that the server thread finish printing out messages
 		
 		//D:\seant\1. University Files\1. COMP Year 3
+//		D:\seant\2uniFiles\1. FINE2005 Year 3
 		
 		while (true) {
 			try {

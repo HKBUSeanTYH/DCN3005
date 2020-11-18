@@ -246,10 +246,22 @@ public class TCPServer extends Thread {
 		sendOut("Sub-directories created successfully!", out);
 		sendOut("end", out);
 	}
-
+	
 	public void upload(String filename, DataOutputStream out) throws IOException {
-		System.out.println(filename);
-		File fname = new File(filename);
+		File fname = null;
+		if (filename.contains(sharedroot)) {
+			fname = new File(filename);
+		}else {
+			fname = new File("../../"+filename);
+		}
+		
+		if (fname.isDirectory()) {
+			System.out.println("File not exists");
+			String quit = "404 not found";
+			sendOut(quit, out);
+			return;
+		}
+		
 		if (fname.exists()) {
 			String canonpath = fname.getCanonicalPath();
 			if (canonpath.contains(sharedroot)) {
@@ -273,17 +285,57 @@ public class TCPServer extends Thread {
 				} catch (Exception e) {
 					System.out.println("Error occurred in uploading file to client. Please try again");
 				}
-			} else {
+			}else {
 				System.out.println("File not in shared directory");
 				String quit = "404 not found";
 				sendOut(quit, out);
 			}
-		} else {
-			System.out.println("File not found");
+		}else {
+			System.out.println("File not exists");
 			String quit = "404 not found";
 			sendOut(quit, out);
 		}
 	}
+
+//	public void upload(String filename, DataOutputStream out) throws IOException {
+//		File fname = new File(filename);
+//		if (fname.isFile()) {
+//			String canonpath = fname.getCanonicalPath();
+//			if (canonpath.contains(sharedroot)) {
+//				try {
+//					FileInputStream in = new FileInputStream(fname);
+//
+//					byte[] buffer = new byte[1024];
+//
+//					out.writeInt(fname.getName().length());
+//					out.write(fname.getName().getBytes(), 0, fname.getName().length()); // writes file name only, not
+//																						// including the path
+//
+//					long size = fname.length();
+//					out.writeLong(size);
+//
+//					while (size > 0) {
+//						int len = in.read(buffer, 0, buffer.length);
+//						out.write(buffer, 0, len);
+//						size -= len;
+//					}
+//					
+//					sendOut("File retrieved successfully", out);
+//					sendOut("end", out);
+//				} catch (Exception e) {
+//					System.out.println("Error occurred in uploading file to client. Please try again");
+//				}
+//			} else {
+//				System.out.println("File not in shared directory");
+//				String quit = "404 not found";
+//				sendOut(quit, out);
+//			}
+//		} else {
+//			System.out.println("File not found");
+//			String quit = "404 not found";
+//			sendOut(quit, out);
+//		}
+//	}
 
 	public void download(DataInputStream in) { // receive upload (one side upload, other side download)
 		byte[] buffer = new byte[1024];

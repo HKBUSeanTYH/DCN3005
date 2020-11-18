@@ -101,7 +101,7 @@ public class TCPClient extends Thread {
 					System.out.println("Please input a valid command");
 				}
 			}
-			
+			System.out.println("receiving next actions");        //debugging
 			receive(in);			//receive next set of actions
 		}
 		
@@ -189,7 +189,7 @@ public class TCPClient extends Thread {
 		}
 	}
 	
-	public void download(DataInputStream in) {			//receive upload (one side upload, other side download)
+	public void download(DataInputStream in) throws IOException {			//receive upload (one side upload, other side download)
 		byte[] buffer = new byte[1024];
 		try {
 			int nameLen = in.readInt();
@@ -214,10 +214,22 @@ public class TCPClient extends Thread {
 			FileOutputStream out = new FileOutputStream(file);
 
 			while(size > 0) {
-				int len = in.read(buffer, 0, buffer.length);
-				out.write(buffer, 0, len);
-				size -= len;
-				System.out.print(".");
+				if (size <= buffer.length) {
+					int sizelong = (int) size;
+					int len = in.read(buffer, 0, sizelong);
+					out.write(buffer, 0, len);
+					size -= len;
+					System.out.print(".");
+				}else {
+					int len = in.read(buffer, 0, buffer.length);
+					out.write(buffer, 0, len);
+					size -= len;
+					System.out.print(".");
+				}
+//				int len = in.read(buffer, 0, buffer.length);
+//				out.write(buffer, 0, len);
+//				size -= len;
+//				System.out.print(".");
 			}
 			out.close();
 			System.out.println("\nDownload completed.");
