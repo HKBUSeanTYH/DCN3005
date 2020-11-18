@@ -1,6 +1,6 @@
-sharedRoot: D:\seant\1. University Files\1. COMP Year 3
+sharedRoot: D:\seant\2uniFiles
 servernm: SeanTYH
-admin 123456 
+admin 123456 full
 sean 654321 partial
 oshan 123321 partial
   
