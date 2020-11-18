@@ -157,6 +157,17 @@ public class TCPServer extends Thread {
 	
 	public void interpretCmd(String cmd, DataOutputStream out, DataInputStream in) throws IOException {
 		String[] cmdTokens = cmd.trim().split(" ");
+		String Tokenpara = "";
+		
+		if (cmdTokens.length >= 2) {
+			for (int i=1; i<cmdTokens.length; i++) {
+				if (i==1) {
+					Tokenpara = cmdTokens[i];
+				}else {
+					Tokenpara = Tokenpara+" "+cmdTokens[i];
+				}
+			}
+		}
 		
 		if (cmdTokens[0].equals("")) {
 			System.err.println("No input received!\n");
@@ -166,6 +177,7 @@ public class TCPServer extends Thread {
 				directory(out);
 				break;
 			case "mkdir":
+				makeDir(Tokenpara, out);
 				break;
 			case "upl":
 				//System.out.println("upload requested");          //debugging purposes
@@ -198,7 +210,7 @@ public class TCPServer extends Thread {
 		}
 	}
 	
-	public void directory(DataOutputStream out) throws IOException {
+	public void directory(DataOutputStream out) throws IOException {				// function 1
 		File dFile = new File(sharedroot);
 		if (dFile.exists()) {
 			String[] files = dFile.list();
@@ -212,6 +224,26 @@ public class TCPServer extends Thread {
 			sendOut("Error in sharedroot directory", out);
 		}
 		return;
+	}
+	
+	public void makeDir(String cmd, DataOutputStream out) throws IOException {							//function 2
+		if (cmd.contains(sharedroot)) {
+			File newDir = new File(cmd);
+			newDir.mkdirs();
+		}else {
+			cmd = sharedroot+"\\"+cmd;
+			try {
+				File newDir = new File(cmd);
+				newDir.mkdirs();
+			}catch (Exception e) {
+				sendOut("Path provided not valid", out);
+				sendOut("end", out);
+				return;
+			}
+		}
+		
+		sendOut("Sub-directories created successfully!", out);
+		sendOut("end", out);
 	}
 	
 	public void download(DataInputStream in) {			//receive upload (one side upload, other side download)

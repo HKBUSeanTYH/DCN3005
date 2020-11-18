@@ -57,6 +57,7 @@ public class TCPClient extends Thread {
 					receive(in);
 					break;
 				case "mkdir":
+					receive(in);    //receive success or failure to make directory/directories
 					break;
 				case "upl":
 					String name ="";
