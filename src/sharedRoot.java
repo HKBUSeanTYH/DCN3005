@@ -172,7 +172,7 @@ public class sharedRoot {
 		}
 //		users.print();       //debugging purposes
 		users.remove(username);				//remove user from linked list
-		users.print();       //debuggin purposes
+		//users.print();       //debuggin purposes
 		
 		out.flush();
 		out.close();
