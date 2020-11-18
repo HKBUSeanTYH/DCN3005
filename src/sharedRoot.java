@@ -59,6 +59,7 @@ public class sharedRoot {
 			//basic can only read, upload/download and list files; partial can create sub-directories, rename target and basic privileges;
 			//admin can delete and partial privileges
 			
+			out.flush();
 			out.close();
 		}
 		
@@ -86,7 +87,7 @@ public class sharedRoot {
 					}
 				}
 			}else{
-				userstring = userstring + line+" ";
+				userstring = userstring+line+" ";
 			}
 		}
 		//System.out.println(users);
@@ -123,39 +124,46 @@ public class sharedRoot {
 		}
 		
 		
-		String result = name.trim() + " " +pw.trim() +" "+acc.trim()+"\n";
-		out.write(result.getBytes());
+		String result = name.trim() + " " +pw.trim() +" "+acc.trim();
+		out.write((result+"\n").getBytes());
 		users.add(name.trim(), pw.trim(), acc.trim());		//append to user linkedlist
+		userstring = userstring + result+" ";
 		System.out.println("User successfully added!");
 		out.close();
 	}
 	
-	public void removeUsers() throws IOException {
-		FileOutputStream out = new FileOutputStream(userData);
-		Scanner in = new Scanner(userstring);
-		Scanner scanner = new Scanner(System.in);
-		
-		System.out.println("Please input user to remove");
-		String username = in.nextLine();
-		
+	public void removeUsers(String username) throws IOException {
 		if (!userstring.contains(username.trim())) {
 			System.out.println("User does not exist");
-			out.close();
 			return;
 		}
 		
-		while (in.hasNextLine()) {
-			String line = in.nextLine();
-			String[] lineTokens = line.trim().split(" ");
-			if (lineTokens[0].equals(username)) {
-				userstring.replace(line, "");
-				continue;
+		FileOutputStream out = new FileOutputStream(userData);
+		Scanner in = new Scanner(userstring);
+		
+		String s1 = "sharedRoot: "+sharedroot+"\n";
+		String s2 = "servernm: "+servernm+"\n";
+		
+		
+		
+		out.write(s1.getBytes());
+		out.write(s2.getBytes());
+		
+		String[] userTokens = userstring.split(" ");
+		
+		for(int i=0; i<userTokens.length; i = i+3) {
+			String line ="";
+			if (userTokens[i].equals(username)) {
+				userstring = userstring.replace(userTokens[i], "");
+				userstring = userstring.replace(userTokens[i+1], "");
+				userstring = userstring.replace(userTokens[i+2], "");
 			}else {
-				line = line+"\n";
+				line = userTokens[i] +" "+userTokens[i+1]+" "+userTokens[i+2]+"\n";
 				out.write(line.getBytes());
 			}
 		}
 		
+		out.flush();
 		out.close();
 	}
 	

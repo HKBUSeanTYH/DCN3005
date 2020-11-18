@@ -86,7 +86,10 @@ public class TCPClient extends Thread {
 					//sendCmd("start", out);
 					break;
 				case "remove":
-					sroot.removeUsers();
+					Thread.sleep(100);
+					System.out.println("Please input user to remove");
+					String username = scanner.nextLine();
+					sroot.removeUsers(username);
 					break;
 				default: 
 					System.out.println("Please input a valid command");
