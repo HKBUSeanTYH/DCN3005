@@ -79,14 +79,20 @@ public class TCPClient extends Thread {
 					receive(in);
 					break;
 				case "del":
+					receive(in);
 					break;
 				case "deldir":
+					receive(in);  //do i recursively delete all?
 					break;
 				case "rename":
+					renameFile(out);
+					receive(in);
 					break;
 				case "read":
+					receive(in);
 					break;
 				case "help":
+					receive(in);
 					break;
 				case "add":
 					sroot.addUsers();
@@ -236,6 +242,22 @@ public class TCPClient extends Thread {
 			System.out.println("\nDownload completed.");
 		} catch (IOException e) {
 			System.err.println("unable to download file.");
+		}
+	}
+	
+	public void renameFile(DataOutputStream out) throws IOException {
+		Scanner in = new Scanner(System.in);
+		while (true) {
+			System.out.println("Please provide a new name for the file");
+			String newname = in.nextLine();
+			
+			if (newname.equals("")) {
+				System.out.println("No input detected!");
+			}else {
+				out.writeInt(newname.length());
+				out.write(newname.getBytes(), 0, newname.length());
+				break;
+			}
 		}
 	}
 

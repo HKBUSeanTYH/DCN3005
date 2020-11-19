@@ -67,7 +67,7 @@ public class TCPServer extends Thread {
 				sendOut("Failure", out);
 			}
 
-			String access = users.getAccess();
+			String access = users.getAccess();  //have to rewrite this to include synchronized or someway to traverse linkedlist
 			boolean connected = true;
 
 			while (connected) {
@@ -83,7 +83,7 @@ public class TCPServer extends Thread {
 					sendOut("1. Read file list [DIR]", out);
 					sendOut("2. Create sub-directory [MKDIR] [name]", out);
 					sendOut("3. Upload and download files [UPL]/[DWL] [name]", out);
-					sendOut("6. Change file/target name [RENAME] [name] [new name]", out);
+					sendOut("6. Change file/target name [RENAME] [name]", out);
 					sendOut("7. Read file information [READ] [name]", out);
 					sendOut("\nPlease input command", out);
 					sendOut("end", out);
@@ -94,7 +94,7 @@ public class TCPServer extends Thread {
 					sendOut("3. Upload and download files [UPL]/[DWL] [name]", out);
 					sendOut("4. Delete files [DEL] [name]", out);
 					sendOut("5. Delete sub-directory [DELDIR] [name]", out);
-					sendOut("6. Change file/target name [RENAME] [name] [new name]", out);
+					sendOut("6. Change file/target name [RENAME] [name]", out);
 					sendOut("7. Read file information [READ] [name]", out);
 					sendOut("\nPlease input command", out);
 					sendOut("end", out);
@@ -102,28 +102,8 @@ public class TCPServer extends Thread {
 
 				String usercmd = receiveCmd(in);
 				System.out.println("Received cmd: " + usercmd); // test if receive cmd
-				interpretCmd(usercmd, out, in);
+				interpretCmd(usercmd, access.trim(), out, in);
 			}
-
-//			System.out.print("Downloading file %s " + name);
-//
-//			long size = in.readLong();
-//			System.out.printf("(%d)", size);
-//
-//			
-//			File file = new File(name);
-//			FileOutputStream out = new FileOutputStream(file);
-//
-//			while(size > 0) {
-//				int len = in.read(buffer, 0, buffer.length);
-//				out.write(buffer, 0, len);
-//				size -= len;
-//				System.out.print(".");
-//			}
-//			System.out.println("\nDownload completed.");
-//			
-//			in.close();
-//			out.close();
 		} catch (Exception e) {
 			System.err.println("Server Error");
 		}
@@ -155,7 +135,7 @@ public class TCPServer extends Thread {
 		return cmd;
 	}
 
-	public void interpretCmd(String cmd, DataOutputStream out, DataInputStream in) throws IOException {
+	public void interpretCmd(String cmd, String access, DataOutputStream out, DataInputStream in) throws IOException {
 		String[] cmdTokens = cmd.trim().split(" ");
 		String Tokenpara = "";
 
@@ -177,24 +157,48 @@ public class TCPServer extends Thread {
 				directory(out);
 				break;
 			case "mkdir":
-				makeDir(Tokenpara, out);
+				if (access.equals("basic") ) {
+					sendOut("You do not have access to this function!", out);
+					sendOut("end", out);
+				}else {
+					makeDir(Tokenpara, out);
+				}
 				break;
 			case "upl":
-				// System.out.println("upload requested"); //debugging purposes
 				download(in);
 				break;
 			case "dwl":
 				upload(Tokenpara, out);
 				break;
 			case "del":
+				if (access.equals("full")) {
+					deleteFile(Tokenpara, out);
+				}else {
+					sendOut("You do not have access to this function!", out);
+					sendOut("end", out);
+				}
 				break;
 			case "deldir":
+				if (access.equals("full")) {
+					
+				}else {
+					sendOut("You do not have access to this function!", out);
+					sendOut("end", out);
+				}
 				break;
 			case "rename":
+				if (access.equals("basic") ) {
+					sendOut("You do not have access to this function!", out);
+					sendOut("end", out);
+				}else {
+					renameFile(Tokenpara, in, out);
+				}
 				break;
 			case "read":
+				readFile(Tokenpara, out);
 				break;
 			case "help": // help and add does not need any server action
+				getHelp(access, out);
 				break;
 			case "add":
 //				String input = receiveCmd(in);
@@ -207,6 +211,7 @@ public class TCPServer extends Thread {
 			default:
 				// System.out.println("Please input a valid command");
 				sendOut("Please input a valid command", out);
+				sendOut("end", out);
 			}
 		}
 	}
@@ -331,6 +336,132 @@ public class TCPServer extends Thread {
 		}
 	}
 	
+	public void deleteFile(String filename, DataOutputStream out) throws IOException {
+		if (filename.startsWith(sharedroot)) {
+			File fname = new File(filename);
+			if (fname.exists() && fname.isFile()) {
+				fname.delete();
+				sendOut("File successfully deleted!", out);
+				sendOut("end", out);
+			}else {
+				sendOut("File does not exist, or is not a file", out);
+				sendOut("end", out);
+			}
+		}else {
+			File rootfile = new File(sharedroot);
+			displayFiles(rootfile, filename, out);
+			sendOut("Please specify a path in order to delete an existing file!\n", out);
+			sendOut("end", out);
+			
+		}
+		
+	}
+	
+	public void renameFile(String filename, DataInputStream in, DataOutputStream out) throws IOException {
+		
+		if (filename.startsWith(sharedroot)) {
+			File file = new File(filename);
+			
+			byte[] buffer = new byte[1024];
+			try {
+				int nameLen = in.readInt();
+				in.read(buffer, 0, nameLen);
+				String name = new String(buffer, 0, nameLen);
+
+				if (name.equals("404 not found")) {
+					return;
+				}
+
+				File newFile = new File(file.getParent()+"\\"+name);
+				
+				String[] filenameTokens = filename.split(".");
+				String[] nameTokens = name.split(".");
+				
+				if (!nameTokens[nameTokens.length - 1].equalsIgnoreCase(filenameTokens[filenameTokens.length-1])) {
+					sendOut("Please provide the proper file type!", out);
+					sendOut("end", out);
+					return;
+				}
+				
+				if (file.renameTo(newFile)) {
+					sendOut("File renamed successfull!", out);
+					sendOut("end", out);
+				}
+
+			} catch (IOException e) {
+				System.err.println("unable to rename file.");
+			}
+		}else {
+			File rootfile = new File(sharedroot);
+			displayFiles(rootfile, filename, out);
+			sendOut("Please specify a path in order to rename an existing file!\n", out);
+			sendOut("end", out);
+		}
+	}
+	
+	public void readFile(String filename, DataOutputStream out) throws IOException {
+		
+		if (filename.startsWith(sharedroot)) {
+			File fname = new File(filename);
+			if (fname.isFile()) {
+				sendOut("name : "+fname.getName(), out);
+				sendOut("size (bytes) : "+fname.length(), out);
+				sendOut("absolute path? : "+fname.isAbsolute(), out);
+				sendOut("exists? : "+fname.exists(), out);
+				sendOut("hidden? : "+fname.isHidden(), out);
+				sendOut("dir? : "+fname.isDirectory(), out);
+				sendOut("file? : "+fname.isFile(), out);
+				sendOut("modified (timestamp) : "+fname.lastModified(), out);
+				sendOut("readable? : "+fname.canRead(), out);
+				sendOut("writable? : "+fname.canWrite(), out);
+				sendOut("executable? : "+fname.canExecute(), out);
+				sendOut("parent : "+fname.getParent(), out);
+				sendOut("absolute file : "+fname.getAbsoluteFile(), out);
+				sendOut("absolute path : "+fname.getAbsolutePath(), out);
+				sendOut("canonical file : "+fname.getCanonicalFile(), out);
+				sendOut("canonical path : "+fname.getCanonicalPath(), out);
+				sendOut("end", out);
+			}else {
+				sendOut("File is a directory!", out);
+				sendOut("end", out);
+			}
+			
+		}else {
+			File rootfile = new File(sharedroot);
+			displayFiles(rootfile, filename, out);
+			sendOut("Please specify a path to the existing file to read file details!\n", out);
+			sendOut("end", out);
+		}
+	}
+	
+	public void getHelp(String access, DataOutputStream out) throws IOException {
+		if (access.trim().equalsIgnoreCase("basic")) {
+			sendOut("1. Read file list [DIR] - takes no input besides command", out);
+			sendOut("3. Upload and download files [UPL]/[DWL] [name] - takes one file name as input besides command", out);
+			sendOut("7. Read file information [READ] [name] - takes one file name as input besides command", out);
+		} else if (access.trim().equalsIgnoreCase("partial")) {
+			sendOut("Your available actions: ", out);
+			sendOut("1. Read file list [DIR]", out);
+			sendOut("2. Create sub-directory [MKDIR] [name] - takes one file name as input besides command", out);
+			sendOut("3. Upload and download files [UPL]/[DWL] [name] - takes one file name as input besides command", out);
+			sendOut("6. Change file/target name [RENAME] [name] - takes one file name as input besides command", out);
+			sendOut("7. Read file information [READ] [name] - takes one file name as input besides command", out);
+		} else if (access.trim().equalsIgnoreCase("full")) {
+			sendOut("Your available actions: ", out);
+			sendOut("1. Read file list [DIR]", out);
+			sendOut("2. Create sub-directory [MKDIR][name] - takes one file name as input besides command", out);
+			sendOut("3. Upload and download files [UPL]/[DWL] [name] - takes one file name as input besides command", out);
+			sendOut("4. Delete files [DEL] [name] - takes one file name as input besides command", out);
+			sendOut("5. Delete sub-directory [DELDIR] [name] - takes one file name as input besides command", out);
+			sendOut("6. Change file/target name [RENAME] [name] - takes one file name as input besides command", out);
+			sendOut("7. Read file information [READ] [name] - takes one file name as input besides command", out);
+		}
+		
+		sendOut("add - initiates process to add new users to login list of personal server", out);
+		sendOut("remove - initiates process to remove users from login list of personal server", out);
+		sendOut("end", out);
+	}
+	
 	public void displayFiles(File dir, String filename, DataOutputStream out) {
 		try {
 			File[] subfiles = dir.listFiles();
@@ -356,26 +487,6 @@ public class TCPServer extends Thread {
 	}
 
 	public static void main(String[] args) {
-
-		// please do not delete this.
-//		int port = 0;
-//		try {
-//			if (args.length != 1)
-//				throw new NumberFormatException();
-//			
-//			port = Integer.parseInt(args[0]);
-//			
-//		} catch (NumberFormatException e) {
-//			System.err.println("Invalid port number.");
-//			System.err.println("Usage: java FileServer portNumber");
-//			System.exit(-1);
-//		}
-//		
-//		try {
-//			new TCPServer(port);
-//		} catch (IOException e) {
-//			System.err.println("Unable to start server with port " + port);
-//		}
 	}
 
 	public void run() {

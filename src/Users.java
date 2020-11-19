@@ -108,17 +108,9 @@ public class Users {
     	}
     }
     
-    public static void runLoop(int x) {
-    	do {
-	          System.out.print("+");
-	          x--;
-
-	      }while ( x > 0);
-	         System.out.println("");
-    }
-
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		
 	}
 
 }
