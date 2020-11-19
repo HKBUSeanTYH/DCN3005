@@ -76,6 +76,7 @@ public class TCPClient extends Thread {
 					break;
 				case "dwl":
 					download(in);
+					receive(in);
 					break;
 				case "del":
 					break;
@@ -196,7 +197,7 @@ public class TCPClient extends Thread {
 			in.read(buffer, 0, nameLen);			
 			String name = new String(buffer, 0, nameLen);
 			
-			if (name.equals("404 not found")) {
+			if (name.equals("404 not found") || name.equals("start")) {
 				return;
 			}
 

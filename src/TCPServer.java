@@ -249,22 +249,17 @@ public class TCPServer extends Thread {
 	
 	public void upload(String filename, DataOutputStream out) throws IOException {
 		File fname = null;
-		if (filename.contains(sharedroot)) {
+		if (filename.startsWith(sharedroot)) {         //if the path provided starts with sharedroot
 			fname = new File(filename);
-		}else {
-			fname = new File("../../"+filename);
-		}
-		
-		if (fname.isDirectory()) {
-			System.out.println("File not exists");
-			String quit = "404 not found";
-			sendOut(quit, out);
-			return;
-		}
-		
-		if (fname.exists()) {
-			String canonpath = fname.getCanonicalPath();
-			if (canonpath.contains(sharedroot)) {
+			
+			if (!fname.exists()) {
+				System.out.println("File not exists");
+				String quit = "404 not found";
+				sendOut(quit, out);
+				return;
+			}
+			
+			if (fname.isFile()) {
 				try {
 					FileInputStream in = new FileInputStream(fname);
 
@@ -286,56 +281,18 @@ public class TCPServer extends Thread {
 					System.out.println("Error occurred in uploading file to client. Please try again");
 				}
 			}else {
-				System.out.println("File not in shared directory");
+				System.out.println("File is a directory");
 				String quit = "404 not found";
 				sendOut(quit, out);
 			}
 		}else {
-			System.out.println("File not exists");
-			String quit = "404 not found";
-			sendOut(quit, out);
+			//recursively traverse subdirectories and printout all paths of files that match name and ask user to specify the path?
+			File rootfile = new File(sharedroot);
+			sendOut("start", out);				//stop client from downloading and prepare to receive possible paths
+			displayFiles(rootfile, filename, out);
+			sendOut("end", out);
 		}
 	}
-
-//	public void upload(String filename, DataOutputStream out) throws IOException {
-//		File fname = new File(filename);
-//		if (fname.isFile()) {
-//			String canonpath = fname.getCanonicalPath();
-//			if (canonpath.contains(sharedroot)) {
-//				try {
-//					FileInputStream in = new FileInputStream(fname);
-//
-//					byte[] buffer = new byte[1024];
-//
-//					out.writeInt(fname.getName().length());
-//					out.write(fname.getName().getBytes(), 0, fname.getName().length()); // writes file name only, not
-//																						// including the path
-//
-//					long size = fname.length();
-//					out.writeLong(size);
-//
-//					while (size > 0) {
-//						int len = in.read(buffer, 0, buffer.length);
-//						out.write(buffer, 0, len);
-//						size -= len;
-//					}
-//					
-//					sendOut("File retrieved successfully", out);
-//					sendOut("end", out);
-//				} catch (Exception e) {
-//					System.out.println("Error occurred in uploading file to client. Please try again");
-//				}
-//			} else {
-//				System.out.println("File not in shared directory");
-//				String quit = "404 not found";
-//				sendOut(quit, out);
-//			}
-//		} else {
-//			System.out.println("File not found");
-//			String quit = "404 not found";
-//			sendOut(quit, out);
-//		}
-//	}
 
 	public void download(DataInputStream in) { // receive upload (one side upload, other side download)
 		byte[] buffer = new byte[1024];
@@ -370,6 +327,34 @@ public class TCPServer extends Thread {
 			System.out.println("\nDownload completed.");
 		} catch (IOException e) {
 			System.err.println("unable to download file.");
+		}
+	}
+	
+	public void displayFiles(File dir, String filename, DataOutputStream out) {
+		try {
+			File[] subfiles = dir.listFiles();
+			int existCounter = 0;
+			for (File file : subfiles) {
+				if (file.isDirectory()){
+//					System.out.println("directory: "+file.getCanonicalPath());
+					sendOut("directory: "+file.getCanonicalPath(), out);
+					displayFiles(file, filename, out);
+				}else {
+					if (file.getCanonicalPath().endsWith(filename)) {
+						//System.out.println("File exists within sub-directory: "+file.getCanonicalPath());
+						existCounter++;
+						sendOut("File exists within sub-directory: "+file.getCanonicalPath(), out);
+					}
+				}
+			}
+			if (existCounter >0) {
+				sendOut("Please specify a path for the file to be downloaded", out);
+			}else {
+				sendOut("File does not exist in any of the sharedroot's sub-directories", out);
+			}
+			
+		}catch (IOException e) {
+			System.out.println("Error in traversing sharedroot subdirectories");
 		}
 	}
 
