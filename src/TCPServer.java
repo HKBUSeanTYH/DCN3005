@@ -290,6 +290,7 @@ public class TCPServer extends Thread {
 			File rootfile = new File(sharedroot);
 			sendOut("start", out);				//stop client from downloading and prepare to receive possible paths
 			displayFiles(rootfile, filename, out);
+			sendOut("Please specify a path in order to download an existing file!\n", out);
 			sendOut("end", out);
 		}
 	}
@@ -337,20 +338,16 @@ public class TCPServer extends Thread {
 			for (File file : subfiles) {
 				if (file.isDirectory()){
 //					System.out.println("directory: "+file.getCanonicalPath());
-					sendOut("directory: "+file.getCanonicalPath(), out);
+					//sendOut("directory: "+file.getCanonicalPath(), out);
 					displayFiles(file, filename, out);
 				}else {
 					if (file.getCanonicalPath().endsWith(filename)) {
 						//System.out.println("File exists within sub-directory: "+file.getCanonicalPath());
 						existCounter++;
-						sendOut("File exists within sub-directory: "+file.getCanonicalPath(), out);
+						sendOut("File exists within sub-directory: "+file.getParent(), out);
+						sendOut("Path to file: "+file.getCanonicalPath(), out);
 					}
 				}
-			}
-			if (existCounter >0) {
-				sendOut("Please specify a path for the file to be downloaded", out);
-			}else {
-				sendOut("File does not exist in any of the sharedroot's sub-directories", out);
 			}
 			
 		}catch (IOException e) {

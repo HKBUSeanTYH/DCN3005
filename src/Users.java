@@ -51,24 +51,6 @@ public class Users {
             }
         }
 	}
-	
-//	public int remove(int k){        //dequeue
-//        int k = 0;
-//
-//        if (this.Head == null){
-//            return k;
-//        }
-//
-//        k = this.Head.value;
-//        this.Head = this.Head.next;
-//        count--;
-//
-//        if (this.Head == null){
-//            this.Tail = null;
-//        }
-//
-//        return k;
-//    }
 
     public boolean find(String k){
         Node prev = Head;
@@ -125,10 +107,18 @@ public class Users {
     		prev = prev.next;
     	}
     }
+    
+    public static void runLoop(int x) {
+    	do {
+	          System.out.print("+");
+	          x--;
+
+	      }while ( x > 0);
+	         System.out.println("");
+    }
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
 	}
 
 }

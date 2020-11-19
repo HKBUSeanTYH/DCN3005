@@ -102,7 +102,7 @@ public class TCPClient extends Thread {
 					System.out.println("Please input a valid command");
 				}
 			}
-			System.out.println("receiving next actions");        //debugging
+			//System.out.println("receiving next actions");        //debugging
 			receive(in);			//receive next set of actions
 		}
 		
