@@ -104,6 +104,12 @@ public class TCPClient extends Thread {
 					String username = scanner.nextLine();
 					sroot.removeUsers(username);
 					break;
+				case "cd":
+					receive(in);
+					break;
+				case "recurdir":
+					receive(in);
+					break;
 				default: 
 					System.out.println("Please input a valid command");
 				}

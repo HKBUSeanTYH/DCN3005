@@ -94,7 +94,7 @@ public class TCPServer extends Thread {
 					sendOut("2. Create sub-directory [MKDIR][name]", out);
 					sendOut("3. Upload and download files [UPL]/[DWL] [name]", out);
 					sendOut("4. Delete files [DEL] [name]", out);
-					sendOut("5. Delete sub-directory [DELDIR] [name]", out);
+					sendOut("5. Delete sub-directory [DELDIR]/[RECURDIR] [name]", out);
 					sendOut("6. Change file/target name [RENAME] [name]", out);
 					sendOut("7. Read file information [READ] [name]", out);
 					sendOut("\nPlease input command", out);
@@ -208,6 +208,18 @@ public class TCPServer extends Thread {
 //				}
 				break;
 			case "remove":
+				break;
+			case "cd":
+				changeDir(Tokenpara, out);
+				break;
+			case "recurdir":
+				if (access.equals("full")) {
+					recursiveDel(Tokenpara, out);
+				}else {
+					sendOut("You do not have access to this function!", out);
+					sendOut("end", out);
+				}
+				
 				break;
 			default:
 				// System.out.println("Please input a valid command");
@@ -390,6 +402,43 @@ public class TCPServer extends Thread {
 		}
 
 	}
+	
+	public void recursiveDel(String filename, DataOutputStream out) throws IOException {
+		if (filename.startsWith(sharedroot) || filename.startsWith(currentDir)) {
+			File fname = new File(filename);
+			if (fname.exists() && fname.isDirectory()) {
+				boolean result = recursiveDirectory(fname);
+				
+				if (result) {
+					sendOut("Directory deleted successfully!\n", out);
+					sendOut("end", out);
+				}else {
+					sendOut("Error occured in recursively deleting files inside directory!\n", out);
+					sendOut("end", out);
+				}
+			}else {
+				sendOut("File is not a directory!", out);
+				sendOut("Please use del method to delete files", out);
+				sendOut("end", out);
+			}
+		}else {
+			File rootfile = new File(sharedroot);
+			displayFiles(rootfile, filename, out);
+			sendOut("Please specify a path in order to delete an existing directory!\n", out);
+			sendOut("end", out);
+		}
+	}
+	
+	public boolean recursiveDirectory(File fname) {
+		File[] contents = fname.listFiles();
+		if (contents.length != 0) {
+			for (File file : contents) {
+				recursiveDirectory(file);
+			}
+		}
+		
+		return fname.delete();
+	}
 
 	public void renameFile(String filename, DataInputStream in, DataOutputStream out) throws IOException {
 
@@ -445,17 +494,34 @@ public class TCPServer extends Thread {
 				sendOut("absolute path : " + fname.getAbsolutePath(), out);
 				sendOut("canonical file : " + fname.getCanonicalFile(), out);
 				sendOut("canonical path : " + fname.getCanonicalPath(), out);
-				sendOut("end", out);
 			} else {
 				sendOut("File is a directory!", out);
-				sendOut("end", out);
 			}
 
 		} else {
 			File rootfile = new File(sharedroot);
 			displayFiles(rootfile, filename, out);
 			sendOut("Please specify a path to the existing file to read file details!\n", out);
-			sendOut("end", out);
+		}
+		
+		sendOut("end", out);
+	}
+	
+	public void changeDir(String filename, DataOutputStream out) throws IOException {
+		if (filename.startsWith(currentDir) || filename.startsWith(sharedroot)) {
+			File newfile = new File(filename);
+			if (newfile.exists() && newfile.isDirectory()) {
+				currentDir = filename;
+				sendOut("Directory changed.", out);
+				sendOut("Current directory: "+newfile.getPath(), out);
+				sendOut("end", out);
+			}else {
+				sendOut("File provided is not a directory!", out);
+				sendOut("end", out);
+			}
+		}else {
+			sendOut("Please provide a valid path", out);
+			sendOut("quit", out);
 		}
 	}
 
@@ -487,6 +553,7 @@ public class TCPServer extends Thread {
 
 		sendOut("add - initiates process to add new users to login list of personal server", out);
 		sendOut("remove - initiates process to remove users from login list of personal server", out);
+		sendOut("cd - takes one file name as input besides command to change the current directory", out);
 		sendOut("end", out);
 	}
 
