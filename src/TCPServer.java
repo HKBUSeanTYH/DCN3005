@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import java.io.DataInputStream;
@@ -51,6 +52,11 @@ public class TCPServer extends Thread {
 	// fulfill the command
 	private void serve(Socket socket, Users users) {
 		byte[] buffer = new byte[1024];
+		
+		ArrayList<String> useraccess = users.getAccess();
+		ArrayList<String> loggedin = users.loggedIn();
+		int index = -1;
+		
 		try {
 			DataInputStream in = new DataInputStream(socket.getInputStream());
 			DataOutputStream out = new DataOutputStream(socket.getOutputStream());
@@ -61,14 +67,18 @@ public class TCPServer extends Thread {
 			// System.out.println(namepw);
 
 			String[] cmd = namepw.split(" ");
-			if (users.logIn(cmd[0], cmd[1])) {
-				sendOut("success", out);
-			} else {
-				sendOut("Failure", out);
+			
+			synchronized (loggedin){
+				if (users.logIn(cmd[0], cmd[1])) {
+					sendOut("success", out);
+				} else {
+					sendOut("Failure", out);
+				}
 			}
-
-			String access = users.getAccess(); // have to rewrite this to include synchronized or someway to traverse
-												// linkedlist
+			index = loggedin.indexOf(cmd[0]);
+			String access = useraccess.get(index);
+			
+			
 			boolean connected = true;
 
 			while (connected) {
@@ -107,6 +117,11 @@ public class TCPServer extends Thread {
 			}
 		} catch (Exception e) {
 			System.err.println("Server Error");
+			synchronized (loggedin) {
+				useraccess.remove(index);
+				loggedin.remove(index);
+				
+			}
 		}
 	}
 
@@ -237,12 +252,11 @@ public class TCPServer extends Thread {
 			for (String file : files) {
 				sendOut(file, out);
 			}
-			sendOut("end", out);
 		} else {
 //			System.err.println("Error in sharedroot directory");
 			sendOut("Error in sharedroot directory", out);
 		}
-		return;
+		sendOut("end", out);
 	}
 
 	public void makeDir(String cmd, DataOutputStream out) throws IOException { // function 2
@@ -454,11 +468,20 @@ public class TCPServer extends Thread {
 				if (name.equals("404 not found")) {
 					return;
 				}
+				
+				if (getFileExtension(name).equals("")) {				//if file extension is not provided, defaults back to original file extension type
+					name = name + getFileExtension(filename);
+				}
 
 				File newFile = new File(file.getParent() + "\\" + name); // rename back to same directory
+				
+				
 
 				if (file.renameTo(newFile)) {
 					sendOut("File renamed successfull!", out);
+					sendOut("end", out);
+				}else {
+					sendOut("Error occurred in renaming file!", out);
 					sendOut("end", out);
 				}
 
@@ -582,6 +605,13 @@ public class TCPServer extends Thread {
 		} catch (IOException e) {
 			System.out.println("Error in traversing sharedroot subdirectories");
 		}
+	}
+	
+	public String getFileExtension(String filename) {
+		if(filename.lastIndexOf(".") != -1 && filename.lastIndexOf(".") != 0) {
+			return filename.substring(filename.lastIndexOf(".")+1);
+		}
+		return "";
 	}
 
 	public static void main(String[] args) {

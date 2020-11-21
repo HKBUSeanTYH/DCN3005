@@ -203,8 +203,8 @@ public class sharedRoot {
 		return users;
 	}
 	
-	public String getRoot() {return this.sharedroot;}
-	public String getServer() {return this.servernm;}
+	public String getRoot() {return this.sharedroot;}			//change this to an arraylist?
+	public String getServer() {return this.servernm;}			//change this to an arraylist?
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
