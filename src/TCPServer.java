@@ -35,21 +35,6 @@ public class TCPServer extends Thread {
 		}
 	}
 
-	// copypasted the file server from lab, needs to be modified
-//	public TCPServer(int port, User users) throws IOException {			//use linkedlist to make a tcpserver class so that can use login method
-//		ServerSocket serverSocket = new ServerSocket(port);
-//		System.out.println("Listening at port " + port);
-//		while(true) {
-//			Socket clientSocket = serverSocket.accept();
-//			System.out.printf("Connected client (%s:%d)\n", clientSocket.getInetAddress(), clientSocket.getPort());
-//			new Thread(()-> {
-//				serve(clientSocket, users);
-//			}).start();
-//		}
-//	}
-
-	// serve needs to be rewritten to accept commands and then call methods to
-	// fulfill the command
 	private void serve(Socket socket, Users users) {
 		byte[] buffer = new byte[1024];
 		
@@ -118,9 +103,10 @@ public class TCPServer extends Thread {
 		} catch (Exception e) {
 			System.err.println("Server Error");
 			synchronized (loggedin) {
-				useraccess.remove(index);
-				loggedin.remove(index);
-				
+				if (index != -1) {
+					useraccess.remove(index);
+					loggedin.remove(index);
+				}
 			}
 		}
 	}
