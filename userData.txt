@@ -1,4 +1,0 @@
-sharedRoot: D:\seant\2uniFiles
-servernm: seantyh
-admin 123456 full
-sean 654321 partial
