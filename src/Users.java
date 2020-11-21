@@ -16,8 +16,8 @@ public class Users {
 //	private String loginName;
 //	private String loginAccess;
 	
-	ArrayList<String> loginName;
-	ArrayList<String> loginAccess;
+	ArrayList<String> loginName = new ArrayList<String>();
+	ArrayList<String> loginAccess = new ArrayList<String>();
 	
 	private Node Head, Tail = null;
 	private int count = 0;
