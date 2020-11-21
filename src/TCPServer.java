@@ -40,7 +40,8 @@ public class TCPServer extends Thread {
 		
 		ArrayList<String> useraccess = users.getAccess();
 		ArrayList<String> loggedin = users.loggedIn();
-		int index = -1;
+		String access = null;
+		String loggedIn = null;
 		
 		try {
 			DataInputStream in = new DataInputStream(socket.getInputStream());
@@ -60,8 +61,9 @@ public class TCPServer extends Thread {
 					sendOut("Failure", out);
 				}
 			}
-			index = loggedin.indexOf(cmd[0]);
-			String access = useraccess.get(index);
+			
+			loggedIn = cmd[0];
+			access = useraccess.get(loggedin.indexOf(cmd[0]));
 			
 			
 			boolean connected = true;
@@ -103,10 +105,8 @@ public class TCPServer extends Thread {
 		} catch (Exception e) {
 			System.err.println("Server Error");
 			synchronized (loggedin) {
-				if (index != -1) {
-					useraccess.remove(index);
-					loggedin.remove(index);
-				}
+				useraccess.remove(access);
+				loggedin.remove(loggedIn);
 			}
 		}
 	}
