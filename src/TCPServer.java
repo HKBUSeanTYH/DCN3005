@@ -60,10 +60,10 @@ public class TCPServer extends Thread {
 				} else {
 					sendOut("Failure", out);
 				}
+				
+				loggedIn = cmd[0];
+				access = useraccess.get(loggedin.indexOf(cmd[0]));  //getting the value based on index of loggedIn because there are duplicate values in arraylist
 			}
-			
-			loggedIn = cmd[0];
-			access = useraccess.get(loggedin.indexOf(cmd[0]));
 			
 			
 			boolean connected = true;
@@ -486,7 +486,7 @@ public class TCPServer extends Thread {
 
 		if (filename.startsWith(sharedroot)) {
 			File fname = new File(filename);
-			if (fname.isFile()) {
+			if (fname.exists()) {
 				sendOut("name : " + fname.getName(), out);
 				sendOut("size (bytes) : " + fname.length(), out);
 				sendOut("absolute path? : " + fname.isAbsolute(), out);
@@ -504,7 +504,7 @@ public class TCPServer extends Thread {
 				sendOut("canonical file : " + fname.getCanonicalFile(), out);
 				sendOut("canonical path : " + fname.getCanonicalPath(), out);
 			} else {
-				sendOut("File is a directory!", out);
+				sendOut("File does not exist!", out);
 			}
 
 		} else {
