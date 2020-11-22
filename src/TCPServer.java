@@ -567,6 +567,7 @@ public class TCPServer extends Thread {
 		sendOut("add - initiates process to add new users to login list of personal server", out);
 		sendOut("remove - initiates process to remove users from login list of personal server", out);
 		sendOut("cd - takes one file name as input besides command to change the current directory", out);
+		sendOut("shutdown - takes no inputs besides command to terminate program running", out);
 		sendOut("end", out);
 	}
 

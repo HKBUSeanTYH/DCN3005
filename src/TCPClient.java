@@ -110,6 +110,9 @@ public class TCPClient extends Thread {
 				case "recurdir":
 					receive(in);
 					break;
+				case "shutdown":
+					System.exit(0);
+					break;
 				default: 
 					System.out.println("Please input a valid command");
 				}
