@@ -105,7 +105,7 @@ public class TCPServer extends Thread {
 		} catch (Exception e) {
 			System.err.println("Server Error");
 			synchronized (loggedin) {
-				useraccess.remove(access);
+				useraccess.remove(loggedin.indexOf(loggedIn));  //loggedIn is the string of username get the index of this and use it to remove access
 				loggedin.remove(loggedIn);
 			}
 		}
