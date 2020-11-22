@@ -57,12 +57,12 @@ public class TCPServer extends Thread {
 			synchronized (loggedin){
 				if (users.logIn(cmd[0], cmd[1])) {
 					sendOut("success", out);
+					loggedIn = cmd[0];
+					access = useraccess.get(loggedin.indexOf(cmd[0]));  
+					//getting the value based on index of loggedIn because there are duplicate values in arraylist
 				} else {
 					sendOut("Failure", out);
 				}
-				
-				loggedIn = cmd[0];
-				access = useraccess.get(loggedin.indexOf(cmd[0]));  //getting the value based on index of loggedIn because there are duplicate values in arraylist
 			}
 			
 			
@@ -103,10 +103,12 @@ public class TCPServer extends Thread {
 				interpretCmd(usercmd, access.trim(), out, in);
 			}
 		} catch (Exception e) {
-			System.err.println("Server Error");
-			synchronized (loggedin) {
-				useraccess.remove(loggedin.indexOf(loggedIn));  //loggedIn is the string of username get the index of this and use it to remove access
-				loggedin.remove(loggedIn);
+			System.err.println("Server Error\n");
+			if (loggedIn != null) {
+				synchronized (loggedin) {
+					useraccess.remove(loggedin.indexOf(loggedIn));  //loggedIn is the string of username get the index of this and use it to remove access
+					loggedin.remove(loggedIn);
+				}
 			}
 		}
 	}
@@ -529,8 +531,10 @@ public class TCPServer extends Thread {
 				sendOut("end", out);
 			}
 		}else {
-			sendOut("Please provide a valid path", out);
-			sendOut("quit", out);
+			File rootfile = new File(sharedroot);
+			displayFiles(rootfile, filename, out);
+			sendOut("Please specify a valid path to the existing directory!\n", out);
+			sendOut("end", out);
 		}
 	}
 
