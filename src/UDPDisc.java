@@ -11,6 +11,7 @@ public class UDPDisc {
 
 	public UDPDisc() throws SocketException {
 		socket = new DatagramSocket(9998);
+		socket.setSoTimeout(10000);   //10s of receiving
 	}
 	
 	public void sendMsg(String str) throws IOException {
@@ -56,13 +57,7 @@ public class UDPDisc {
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub	
-		UDPDisc disc = new UDPDisc();
-		disc.servernm = "SeanTYH";
-		disc.sendMsg("initiate discovery");
-		
-		while (true) {
-			disc.receiveMsg();
-		}
+
 	}
 
 }

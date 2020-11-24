@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.Scanner;
 
 public class StartUp {
@@ -26,18 +27,36 @@ public class StartUp {
 
 		Thread.sleep(100);			//delays StartUp so that the server thread finish printing out messages
 		
-		System.out.println("Initiate discovery process? Y/N ");
+		//call udp
+		UDPDisc disc = new UDPDisc();
+		disc.servernm = sroot.getServer();
 		boolean initiate = true;
+		int count =0;
+		System.out.println("Initiate discovery process? Y/N ");
 		
-		while (initiate) {
+		
+		//create a do-while loop with timer for 15s to receive for 15s 
+		//then ask user whether to continue receiving or input a server to connect
+		do {
+			if (count != 0) {
+				System.out.println("\nContinue with discovery process? Y/N ");
+			}
 			String response = in.nextLine();
 			if (response.toLowerCase().equals("y")) {
-				
+				disc.sendMsg("initiate discovery");
+				while (true) {
+					try {
+						disc.receiveMsg();
+					}catch(SocketTimeoutException e) {
+						break;
+					}
+				}
+								
 			}else {
 				initiate = false;
-				break;
 			}
-		}
+			count++;
+		}while(initiate);
 		
 		//D:\seant\1. University Files\1. COMP Year 3
 		//D:\seant\2uniFiles\1. FINE2005 Year 3
