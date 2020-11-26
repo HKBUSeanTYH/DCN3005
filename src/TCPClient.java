@@ -85,7 +85,9 @@ public class TCPClient extends Thread {
 					receive(in);  //do i recursively delete all?
 					break;
 				case "rename":
-					renameFile(out);
+					if (!name.equals("")) {
+						renameFile(out);
+					}
 					receive(in);
 					break;
 				case "read":

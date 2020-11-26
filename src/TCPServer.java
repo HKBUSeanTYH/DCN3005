@@ -209,7 +209,7 @@ public class TCPServer extends Thread {
 					sendOut("end", out);
 				} else {
 					if (Tokenpara.equals("")) {
-						sendOut("Please provide a filename", out);
+						sendOut("Please provide a filename!", out);
 						sendOut("end", out);
 					}else {
 						renameFile(Tokenpara, in, out);
@@ -375,7 +375,7 @@ public class TCPServer extends Thread {
 
 	public void deleteFile(String filename, DataOutputStream out) throws IOException {
 		if (filename.equals("")) {
-			sendOut("Please provide a filename", out);
+			sendOut("Please provide a filename!", out);
 			sendOut("end", out);
 			return;
 		}
@@ -404,7 +404,7 @@ public class TCPServer extends Thread {
 
 	public void deldir(String filename, DataOutputStream out) throws IOException {
 		if (filename.equals("")) {
-			sendOut("Please provide a filename", out);
+			sendOut("Please provide a filename!", out);
 			sendOut("end", out);
 			return;
 		}
@@ -439,7 +439,7 @@ public class TCPServer extends Thread {
 	
 	public void recursiveDel(String filename, DataOutputStream out) throws IOException {
 		if (filename.equals("")) {
-			sendOut("Please provide a filename", out);
+			sendOut("Please provide a filename!", out);
 			sendOut("end", out);
 			return;
 		}
@@ -524,7 +524,7 @@ public class TCPServer extends Thread {
 
 	public void readFile(String filename, DataOutputStream out) throws IOException {
 		if (filename.equals("")) {
-			sendOut("Please provide a filename", out);
+			sendOut("Please provide a filename!", out);
 			sendOut("end", out);
 			return;
 		}
