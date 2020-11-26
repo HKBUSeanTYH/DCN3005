@@ -83,7 +83,7 @@ public class TCPServer extends Thread {
 					sendOut("1. Read file list [DIR]", out);
 					sendOut("2. Create sub-directory [MKDIR] [name]", out);
 					sendOut("3. Upload and download files [UPL]/[DWL] [name]", out);
-					sendOut("6. Change file/target name [RENAME]", out);
+					sendOut("6. Change file/target name [RENAME] [name]", out);
 					sendOut("7. Read file information [READ] [name]", out);
 					sendOut("\nPlease input command", out);
 					sendOut("end", out);
@@ -94,7 +94,7 @@ public class TCPServer extends Thread {
 					sendOut("3. Upload and download files [UPL]/[DWL] [name]", out);
 					sendOut("4. Delete files [DEL] [name]", out);
 					sendOut("5. Delete sub-directory [DELDIR]/[RECURDIR] [name]", out);
-					sendOut("6. Change file/target name [RENAME]", out);
+					sendOut("6. Change file/target name [RENAME] [name]", out);
 					sendOut("7. Read file information [READ] [name]", out);
 					sendOut("\nPlease input command", out);
 					sendOut("end", out);
@@ -167,7 +167,12 @@ public class TCPServer extends Thread {
 					sendOut("You do not have access to this function!", out);
 					sendOut("end", out);
 				} else {
-					makeDir(Tokenpara, out);
+					if (Tokenpara.equals("")) {
+						sendOut("Please provide a filename!", out);
+						sendOut("end", out);
+					}else {
+						makeDir(Tokenpara, out);
+					}
 				}
 				break;
 			case "upl":
@@ -177,6 +182,7 @@ public class TCPServer extends Thread {
 				if (Tokenpara.equals("")) {
 					sendOut("404 not found", out);
 					sendOut("Please provide a filename!", out);
+					sendOut("end", out);
 				}else {
 					upload(Tokenpara, out);
 				}
@@ -592,7 +598,7 @@ public class TCPServer extends Thread {
 			sendOut("2. Create sub-directory [MKDIR] [name] - takes one file name as input besides command", out);
 			sendOut("3. Upload and download files [UPL]/[DWL] [name] - takes one file name as input besides command",
 					out);
-			sendOut("6. Change file/target name [RENAME] - takes one file name as input besides command", out);
+			sendOut("6. Change file/target name [RENAME] [name] - takes one file name as input besides command", out);
 			sendOut("7. Read file information [READ] [name] - takes one file name as input besides command", out);
 		} else if (access.trim().equalsIgnoreCase("full")) {
 			sendOut("Your available actions: ", out);
@@ -602,7 +608,7 @@ public class TCPServer extends Thread {
 					out);
 			sendOut("4. Delete files [DEL] [name] - takes one file name as input besides command", out);
 			sendOut("5. Delete sub-directory [DELDIR] [name] - takes one file name as input besides command", out);
-			sendOut("6. Change file/target name [RENAME] - takes one file name as input besides command", out);
+			sendOut("6. Change file/target name [RENAME] [name] - takes one file name as input besides command", out);
 			sendOut("7. Read file information [READ] [name] - takes one file name as input besides command", out);
 		}
 

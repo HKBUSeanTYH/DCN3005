@@ -52,7 +52,7 @@ public class StartUp {
 					}
 				}
 								
-			}else {
+			}else if (response.toLowerCase().equals("n")){
 				initiate = false;
 			}
 			count++;
