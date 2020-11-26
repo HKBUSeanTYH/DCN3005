@@ -124,7 +124,11 @@ public class TCPClient extends Thread {
 	}
 	
 	public boolean sendLogin(String username, String pw, DataOutputStream out, DataInputStream in) throws IOException {
-		String send = username+" "+pw;
+		String send = username;
+		out.writeInt(send.length());
+		out.write(send.getBytes(), 0, send.length());
+		
+		send = pw;
 		out.writeInt(send.length());
 		out.write(send.getBytes(), 0, send.length());
 		

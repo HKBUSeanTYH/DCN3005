@@ -49,16 +49,18 @@ public class TCPServer extends Thread {
 
 			int userlogin = in.readInt();
 			in.read(buffer, 0, userlogin);
-			String namepw = new String(buffer, 0, userlogin);
-			// System.out.println(namepw);
+			String name = new String(buffer, 0, userlogin);
+			
+			userlogin = in.readInt();
+			in.read(buffer, 0, userlogin);
+			String pw = new String(buffer, 0, userlogin);
 
-			String[] cmd = namepw.split(" ");
 			
 			synchronized (loggedin){
-				if (users.logIn(cmd[0], cmd[1])) {
+				if (users.logIn(name, pw)) {
 					sendOut("success", out);
-					loggedIn = cmd[0];
-					access = useraccess.get(loggedin.indexOf(cmd[0]));  
+					loggedIn = name;
+					access = useraccess.get(loggedin.indexOf(name));  
 					//getting the value based on index of loggedIn because there are duplicate values in arraylist
 				} else {
 					sendOut("Failure", out);
@@ -184,7 +186,7 @@ public class TCPServer extends Thread {
 				break;
 			case "deldir":
 				if (access.equals("full")) {
-
+					deldir(Tokenpara, out);
 				} else {
 					sendOut("You do not have access to this function!", out);
 					sendOut("end", out);
@@ -271,6 +273,12 @@ public class TCPServer extends Thread {
 	}
 
 	public void upload(String filename, DataOutputStream out) throws IOException {
+		if (filename.equals("")) {
+			sendOut("Please provide a filename", out);
+			sendOut("end", out);
+			return;
+		}
+		
 		File fname = null;
 		if (filename.startsWith(sharedroot)) { // if the path provided starts with sharedroot
 			fname = new File(filename);
@@ -356,6 +364,12 @@ public class TCPServer extends Thread {
 	}
 
 	public void deleteFile(String filename, DataOutputStream out) throws IOException {
+		if (filename.equals("")) {
+			sendOut("Please provide a filename", out);
+			sendOut("end", out);
+			return;
+		}
+		
 		if (filename.startsWith(sharedroot)) {
 			File fname = new File(filename);
 			if (fname.exists() && fname.isFile()) {
@@ -379,12 +393,20 @@ public class TCPServer extends Thread {
 	}
 
 	public void deldir(String filename, DataOutputStream out) throws IOException {
+		if (filename.equals("")) {
+			sendOut("Please provide a filename", out);
+			sendOut("end", out);
+			return;
+		}
+		
 		if (filename.startsWith(sharedroot)) {
 			File fname = new File(filename);
 			if (fname.exists() && fname.isDirectory()) {
 				File[] fnameList = fname.listFiles();
 				if (fnameList.length == 0) {
 					fname.delete();
+					sendOut("Sub-directory deleted successfully!", out);
+					sendOut("end", out);
 				} else {
 					sendOut("Sub-directory is not empty! Unable to delete!", out);
 					sendOut("end", out);
@@ -398,7 +420,7 @@ public class TCPServer extends Thread {
 			}
 		} else {
 			File rootfile = new File(sharedroot);
-			displayFiles(rootfile, filename, out);
+			displayDirs(rootfile, filename, out);
 			sendOut("Please specify a path in order to delete an existing directory!\n", out);
 			sendOut("end", out);
 		}
@@ -406,6 +428,12 @@ public class TCPServer extends Thread {
 	}
 	
 	public void recursiveDel(String filename, DataOutputStream out) throws IOException {
+		if (filename.equals("")) {
+			sendOut("Please provide a filename", out);
+			sendOut("end", out);
+			return;
+		}
+		
 		if (filename.startsWith(sharedroot) || filename.startsWith(currentDir)) {
 			File fname = new File(filename);
 			if (fname.exists() && fname.isDirectory()) {
@@ -425,7 +453,7 @@ public class TCPServer extends Thread {
 			}
 		}else {
 			File rootfile = new File(sharedroot);
-			displayFiles(rootfile, filename, out);
+			displayDirs(rootfile, filename, out);
 			sendOut("Please specify a path in order to delete an existing directory!\n", out);
 			sendOut("end", out);
 		}
@@ -443,6 +471,12 @@ public class TCPServer extends Thread {
 	}
 
 	public void renameFile(String filename, DataInputStream in, DataOutputStream out) throws IOException {
+		
+		if (filename.equals("")) {
+			sendOut("Please provide a filename", out);
+			sendOut("end", out);
+			return;
+		}
 
 		if (filename.startsWith(sharedroot)) {
 			File file = new File(filename);
@@ -485,7 +519,11 @@ public class TCPServer extends Thread {
 	}
 
 	public void readFile(String filename, DataOutputStream out) throws IOException {
-
+		if (filename.equals("")) {
+			sendOut("Please provide a filename", out);
+			sendOut("end", out);
+			return;
+		}
 		if (filename.startsWith(sharedroot)) {
 			File fname = new File(filename);
 			if (fname.exists()) {
@@ -519,6 +557,12 @@ public class TCPServer extends Thread {
 	}
 	
 	public void changeDir(String filename, DataOutputStream out) throws IOException {
+		if (filename.equals("")) {
+			sendOut("Please provide a filename", out);
+			sendOut("end", out);
+			return;
+		}
+		
 		if (filename.startsWith(currentDir) || filename.startsWith(sharedroot)) {
 			File newfile = new File(filename);
 			if (newfile.exists() && newfile.isDirectory()) {
@@ -569,6 +613,33 @@ public class TCPServer extends Thread {
 		sendOut("cd - takes one file name as input besides command to change the current directory", out);
 		sendOut("shutdown - takes no inputs besides command to terminate program running", out);
 		sendOut("end", out);
+	}
+	
+	public void displayDirs(File dir, String filename, DataOutputStream out) {
+		try {
+			File[] subfiles = dir.listFiles();
+			for (File file : subfiles) {
+				if (file.isDirectory()) {
+					if (file.getCanonicalPath().endsWith(filename)) {
+						sendOut("File exists within sub-directory: " + file.getParent(), out);
+						sendOut("Path to file: " + file.getCanonicalPath(), out);
+					}
+//					System.out.println("directory: "+file.getCanonicalPath());
+					// sendOut("directory: "+file.getCanonicalPath(), out);
+					displayDirs(file, filename, out);
+				} else {
+//					if (file.getCanonicalPath().endsWith(filename)) {
+//						// System.out.println("File exists within sub-directory:
+//						// "+file.getCanonicalPath());
+////						sendOut("File exists within sub-directory: " + file.getParent(), out);
+////						sendOut("Path to file: " + file.getCanonicalPath(), out);
+//					}
+				}
+			}
+
+		} catch (IOException e) {
+			System.out.println("Error in traversing sharedroot subdirectories");
+		}
 	}
 
 	public void displayFiles(File dir, String filename, DataOutputStream out) {
