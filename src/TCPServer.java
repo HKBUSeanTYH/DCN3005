@@ -83,7 +83,7 @@ public class TCPServer extends Thread {
 					sendOut("1. Read file list [DIR]", out);
 					sendOut("2. Create sub-directory [MKDIR] [name]", out);
 					sendOut("3. Upload and download files [UPL]/[DWL] [name]", out);
-					sendOut("6. Change file/target name [RENAME] [name]", out);
+					sendOut("6. Change file/target name [RENAME]", out);
 					sendOut("7. Read file information [READ] [name]", out);
 					sendOut("\nPlease input command", out);
 					sendOut("end", out);
@@ -94,7 +94,7 @@ public class TCPServer extends Thread {
 					sendOut("3. Upload and download files [UPL]/[DWL] [name]", out);
 					sendOut("4. Delete files [DEL] [name]", out);
 					sendOut("5. Delete sub-directory [DELDIR]/[RECURDIR] [name]", out);
-					sendOut("6. Change file/target name [RENAME] [name]", out);
+					sendOut("6. Change file/target name [RENAME]", out);
 					sendOut("7. Read file information [READ] [name]", out);
 					sendOut("\nPlease input command", out);
 					sendOut("end", out);
@@ -174,7 +174,12 @@ public class TCPServer extends Thread {
 				download(in);
 				break;
 			case "dwl":
-				upload(Tokenpara, out);
+				if (Tokenpara.equals("")) {
+					sendOut("404 not found", out);
+					sendOut("Please provide a filename!", out);
+				}else {
+					upload(Tokenpara, out);
+				}
 				break;
 			case "del":
 				if (access.equals("full")) {
@@ -197,7 +202,12 @@ public class TCPServer extends Thread {
 					sendOut("You do not have access to this function!", out);
 					sendOut("end", out);
 				} else {
-					renameFile(Tokenpara, in, out);
+					if (Tokenpara.equals("")) {
+						sendOut("Please provide a filename", out);
+						sendOut("end", out);
+					}else {
+						renameFile(Tokenpara, in, out);
+					}
 				}
 				break;
 			case "read":
@@ -273,12 +283,6 @@ public class TCPServer extends Thread {
 	}
 
 	public void upload(String filename, DataOutputStream out) throws IOException {
-		if (filename.equals("")) {
-			sendOut("Please provide a filename", out);
-			sendOut("end", out);
-			return;
-		}
-		
 		File fname = null;
 		if (filename.startsWith(sharedroot)) { // if the path provided starts with sharedroot
 			fname = new File(filename);
@@ -471,12 +475,6 @@ public class TCPServer extends Thread {
 	}
 
 	public void renameFile(String filename, DataInputStream in, DataOutputStream out) throws IOException {
-		
-		if (filename.equals("")) {
-			sendOut("Please provide a filename", out);
-			sendOut("end", out);
-			return;
-		}
 
 		if (filename.startsWith(sharedroot)) {
 			File file = new File(filename);
@@ -594,7 +592,7 @@ public class TCPServer extends Thread {
 			sendOut("2. Create sub-directory [MKDIR] [name] - takes one file name as input besides command", out);
 			sendOut("3. Upload and download files [UPL]/[DWL] [name] - takes one file name as input besides command",
 					out);
-			sendOut("6. Change file/target name [RENAME] [name] - takes one file name as input besides command", out);
+			sendOut("6. Change file/target name [RENAME] - takes one file name as input besides command", out);
 			sendOut("7. Read file information [READ] [name] - takes one file name as input besides command", out);
 		} else if (access.trim().equalsIgnoreCase("full")) {
 			sendOut("Your available actions: ", out);
@@ -604,7 +602,7 @@ public class TCPServer extends Thread {
 					out);
 			sendOut("4. Delete files [DEL] [name] - takes one file name as input besides command", out);
 			sendOut("5. Delete sub-directory [DELDIR] [name] - takes one file name as input besides command", out);
-			sendOut("6. Change file/target name [RENAME] [name] - takes one file name as input besides command", out);
+			sendOut("6. Change file/target name [RENAME] - takes one file name as input besides command", out);
 			sendOut("7. Read file information [READ] [name] - takes one file name as input besides command", out);
 		}
 

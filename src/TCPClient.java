@@ -181,6 +181,12 @@ public class TCPClient extends Thread {
 	}
 	
 	public void upload(String filename, DataOutputStream out) throws IOException {
+		if (filename.equals("")) {
+			System.out.println("Please provide a file name");
+			String quit = "404 not found";
+			sendCmd(quit, out);
+			return;
+		}
 		File fname = new File(filename);
 		if (fname.exists()) {
 			try {
