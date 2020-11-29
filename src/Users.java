@@ -13,9 +13,6 @@ public class Users {
 		
 	}
 	
-//	private String loginName;
-//	private String loginAccess;
-	
 	ArrayList<String> loginName = new ArrayList<String>();
 	ArrayList<String> loginAccess = new ArrayList<String>();
 	
@@ -28,7 +25,6 @@ public class Users {
 
         if (find(username) == true){
             return;
-            // if exists, do nothing
 
         }else{
             if(this.Head == null && this.Tail == null){
@@ -81,8 +77,6 @@ public class Users {
         for (int i=0; i<count; i++){
             if (prev.username.equals(username)){
             	if(prev.password.equals(pw)) {
-//            		loginName = prev.username;
-//            		loginAccess = prev.access;
             		loginName.add(prev.username);
             		loginAccess.add(prev.access);
             		return true;

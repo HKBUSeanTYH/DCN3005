@@ -33,8 +33,7 @@ public class StartUp {
 		boolean initiate = true;
 		int count =0;
 		System.out.println("Initiate discovery process? Y/N ");
-		
-		
+			
 		//create a do-while loop with timer for 15s to receive for 15s 
 		//then ask user whether to continue receiving or input a server to connect
 		do {
@@ -81,30 +80,5 @@ public class StartUp {
 				System.err.println("Bad Input");
 			}
 		}
-
-//		TCPServer server = new TCPServer(12345, users);	//this refers to this pc's self server action with its own list of accepted users
-//		TCPClient client = new TCPClient(ip, port);	//this is to act as a client and connect to other peoples server
-
-		// use ipAddr to connect to tcp, send username and password to the TCP "server"
-		// to perform user.login()
-
-		// need to put UDP and TCP on startup codes
-
-		//in.close();
 	}
-
 }
-
-//dont use multi-process because cant pass linkedlist as argument to processbuilder	
-// ProcessBuilder server = new ProcessBuilder("java", "-cp",
-// "D:\\seant\\eclipse-workspace\\DCN3005\\bin", "TCPServer", "12345", "users");
-// ProcessBuilder client = new ProcessBuilder("java", "-cp",
-// "D:\\seant\\eclipse-workspace\\DCN3005\\bin", "TCPClient", "192.168.50.245",
-// "12345");
-
-//		server.inheritIO();
-//		client.inheritIO();
-//		Process s = server.start();
-//		Process c = client.start();
-//		s.waitFor();
-//		c.waitFor();
