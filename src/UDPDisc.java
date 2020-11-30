@@ -3,15 +3,16 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 
-public class UDPDisc {
+public class UDPDisc extends Thread{
 	DatagramSocket socket;
 	String servernm;
 	
 
 	public UDPDisc() throws SocketException {
 		socket = new DatagramSocket(9998);
-		socket.setSoTimeout(10000);   //10s of receiving
+		socket.setSoTimeout(15000);   //10s of receiving
 	}
 	
 	public void sendMsg(String str) throws IOException {
@@ -54,10 +55,31 @@ public class UDPDisc {
 //		System.out.println("sent by:\t" + srcAddr);
 //		System.out.println("via port:\t" + srcPort);
 	}
+	
+	public void disc() throws IOException {
+		sendMsg("initiate discovery");
+		while (true) {
+			try {
+				receiveMsg();
+			} catch (SocketTimeoutException e) {
+				// TODO Auto-generated catch block
+				break;
+			}
+		}
+	}
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub	
 
+	}
+	
+	public void run() {
+		try {
+			disc();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

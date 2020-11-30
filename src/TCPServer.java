@@ -326,6 +326,7 @@ public class TCPServer extends Thread {
 				String quit = "404 not found";
 				sendOut(quit, out);
 			}
+			sendOut("end", out);
 		} else {
 			// recursively traverse subdirectories and printout all paths of files that
 			// match name and ask user to specify the path?
@@ -516,6 +517,8 @@ public class TCPServer extends Thread {
 			}
 		} else {
 			File rootfile = new File(sharedroot);
+			String str = receiveCmd(in);
+			sendOut("Path not provided for file "+str, out);
 			displayFiles(rootfile, filename, out);
 			sendOut("Please specify a path in order to rename an existing file!\n", out);
 			sendOut("end", out);
