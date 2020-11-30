@@ -31,37 +31,39 @@ public class StartUp {
 		UDPDisc disc = new UDPDisc();
 		disc.servernm = sroot.getServer();
 		System.out.println("Initiating discovery process");
+		disc.start();
+		Thread.sleep(10000);
+		//disc.join();
 		
-		disc.sendMsg("initiate discovery");
-		while (true) {
-			try {
-				disc.receiveMsg();
-			}catch(SocketTimeoutException e) {
-				break;
-			}
-		}
-		
-		boolean initiate = true;
-//		System.out.println("Initiate discovery process? Y/N ");
-//		create a do-while loop with timer for 15s to receive for 15s 
-//		then ask user whether to continue receiving or input a server to connect
-		do {
-			System.out.println("\nContinue with discovery process? Y/N ");
-			String response = in.nextLine();
-			if (response.toLowerCase().equals("y")) {
-				disc.sendMsg("initiate discovery");
-				while (true) {
-					try {
-						disc.receiveMsg();
-					}catch(SocketTimeoutException e) {
-						break;
-					}
-				}
-								
-			}else if (response.toLowerCase().equals("n")){
-				initiate = false;
-			}
-		}while(initiate);
+//		disc.sendMsg("initiate discovery");
+//		while (true) {
+//			try {
+//				disc.receiveMsg();
+//			}catch(SocketTimeoutException e) {
+//				break;
+//			}
+//		}
+//		
+//		boolean initiate = true;
+////		create a do-while loop with timer for 15s to receive for 15s 
+////		then ask user whether to continue receiving or input a server to connect
+//		do {
+//			System.out.println("\nContinue with discovery process? Y/N ");
+//			String response = in.nextLine();
+//			if (response.toLowerCase().equals("y")) {
+//				disc.sendMsg("initiate discovery");
+//				while (true) {
+//					try {
+//						disc.receiveMsg();
+//					}catch(SocketTimeoutException e) {
+//						break;
+//					}
+//				}
+//								
+//			}else if (response.toLowerCase().equals("n")){
+//				initiate = false;
+//			}
+//		}while(initiate);
 		
 		//D:\seant\1. University Files\1. COMP Year 3
 		//D:\seant\2uniFiles\1. FINE2005 Year 3
@@ -81,7 +83,7 @@ public class StartUp {
 				client.sroot = sroot;				//passing clients personal root to client so can add/remove users
 
 				client.start();
-				client.join();       
+				client.join();
 			}catch (Exception e) {
 				System.err.println("Bad Input");
 			}

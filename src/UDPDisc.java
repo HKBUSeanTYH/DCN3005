@@ -5,14 +5,13 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
-public class UDPDisc{
+public class UDPDisc extends Thread{		//extends Thread
 	DatagramSocket socket;
 	String servernm;
-	
 
 	public UDPDisc() throws SocketException {
 		socket = new DatagramSocket(9998);
-		socket.setSoTimeout(15000);   //10s of receiving
+		//socket.setSoTimeout(15000);   //15s of receiving
 	}
 	
 	public void sendMsg(String str) throws IOException {
@@ -50,10 +49,6 @@ public class UDPDisc{
 			System.out.println("from IP: "+srcAddr);
 		}
 		
-//		System.out.println("Received data:\t" + str);
-//		System.out.println("data size:\t" + size);
-//		System.out.println("sent by:\t" + srcAddr);
-//		System.out.println("via port:\t" + srcPort);
 	}
 	
 	public void disc() throws IOException {
@@ -61,15 +56,19 @@ public class UDPDisc{
 		while (true) {
 			try {
 				receiveMsg();
-			} catch (SocketTimeoutException e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				break;
 			}
 		}
 	}
-
-	public static void main(String[] args) throws IOException {
-		// TODO Auto-generated method stub	
-
+	
+	public void run() {
+		try {
+			disc();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("Error in launching udp");
+		}
 	}
 }
