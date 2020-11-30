@@ -32,8 +32,9 @@ public class StartUp {
 		disc.servernm = sroot.getServer();
 		System.out.println("Initiating discovery process");
 		disc.start();
+		//disc.join();  do not call join, because join() will wait indefinitely if referenced thread is blocked.
+		//in this case thread is blocked because of .receive() so code will not progress.
 		Thread.sleep(10000);
-		//disc.join();
 		
 //		disc.sendMsg("initiate discovery");
 //		while (true) {
