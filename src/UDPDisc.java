@@ -5,7 +5,7 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
-public class UDPDisc extends Thread{
+public class UDPDisc{
 	DatagramSocket socket;
 	String servernm;
 	
@@ -72,14 +72,4 @@ public class UDPDisc extends Thread{
 		// TODO Auto-generated method stub	
 
 	}
-	
-	public void run() {
-		try {
-			disc();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
 }
