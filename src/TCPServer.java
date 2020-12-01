@@ -29,9 +29,15 @@ public class TCPServer extends Thread {
 		while (true) {
 			Socket clientSocket = serverSocket.accept();
 			System.out.printf("Connected client (%s:%d)\n", clientSocket.getInetAddress(), clientSocket.getPort());
-			new Thread(() -> {
-				serve(clientSocket, users);
-			}).start();
+			
+			Thread t = new Thread(() -> {
+				try {
+					serve(clientSocket, users);
+				} catch (Exception e) {
+					System.err.println("connection dropped.");
+				}
+			});
+			t.start();
 		}
 	}
 

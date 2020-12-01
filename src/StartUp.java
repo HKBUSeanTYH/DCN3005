@@ -20,6 +20,7 @@ public class StartUp {
 		TCPServer server = new TCPServer();
 		server.port = 9999;
 		server.users = users;
+		//pass list of accepted users to personal server
 		server.sharedroot = sroot.getRoot();
 		server.servernm = sroot.getServer();
 		System.out.println("Now running personal server in the background");
@@ -74,7 +75,6 @@ public class StartUp {
 				System.out.println("Please input Server IP: "); // 192.168.50.245
 				String ip = in.nextLine().trim();
 
-				// do we set only one port for server? ie hard code server port as xxxxx?
 				System.out.print("Port no: ");
 				int port = Integer.parseInt(in.nextLine());
 
