@@ -99,7 +99,7 @@ public class TCPServer extends Thread {
 					sendOut("2. Create sub-directory [MKDIR][name]", out);
 					sendOut("3. Upload and download files [UPL]/[DWL] [name]", out);
 					sendOut("4. Delete files [DEL] [name]", out);
-					sendOut("5. Delete sub-directory [DELDIR]/[RECURDIR] [name]", out);
+					sendOut("5. Delete sub-directory [DELDIR] / [RECURDIR] [name]", out);
 					sendOut("6. Change file/target name [RENAME] [name]", out);
 					sendOut("7. Read file information [READ] [name]", out);
 					sendOut("\nPlease input command", out);
@@ -494,10 +494,6 @@ public class TCPServer extends Thread {
 				int nameLen = in.readInt();
 				in.read(buffer, 0, nameLen);
 				String name = new String(buffer, 0, nameLen);
-
-				if (name.equals("404 not found")) {
-					return;
-				}
 				
 				if (getFileExtension(name).equals("")) {				//if file extension is not provided, defaults back to original file extension type
 					name = name + getFileExtension(filename);
@@ -613,7 +609,7 @@ public class TCPServer extends Thread {
 			sendOut("3. Upload and download files [UPL]/[DWL] [name] - takes one file name as input besides command",
 					out);
 			sendOut("4. Delete files [DEL] [name] - takes one file name as input besides command", out);
-			sendOut("5. Delete sub-directory [DELDIR] [name] - takes one file name as input besides command", out);
+			sendOut("5. Delete sub-directory [DELDIR] / [RECURDIR] [name] - takes one file name as input besides command, deldir is unable to delete non-empty directories, while recurdir will recursively delete all files in a directory before finally deleting the directory.", out);
 			sendOut("6. Change file/target name [RENAME] [name] - takes one file name as input besides command", out);
 			sendOut("7. Read file information [READ] [name] - takes one file name as input besides command", out);
 		}
