@@ -609,11 +609,12 @@ public class TCPServer extends Thread {
 			sendOut("3. Upload and download files [UPL]/[DWL] [name] - takes one file name as input besides command",
 					out);
 			sendOut("4. Delete files [DEL] [name] - takes one file name as input besides command", out);
-			sendOut("5. Delete sub-directory [DELDIR] / [RECURDIR] [name] - takes one file name as input besides command, deldir is unable to delete non-empty directories, while recurdir will recursively delete all files in a directory before finally deleting the directory.", out);
+			sendOut("5. Delete sub-directory [DELDIR] / [RECURDIR] [name] - takes one file name as input besides command", out);
 			sendOut("6. Change file/target name [RENAME] [name] - takes one file name as input besides command", out);
 			sendOut("7. Read file information [READ] [name] - takes one file name as input besides command", out);
 		}
 
+		sendOut("deldir is unable to delete non-empty directories, while recurdir will recursively delete all files in a directory before finally deleting the directory", out);
 		sendOut("add - initiates process to add new users to login list of personal server", out);
 		sendOut("remove - initiates process to remove users from login list of personal server", out);
 		sendOut("cd - takes one file name as input besides command to change the current directory", out);
