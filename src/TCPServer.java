@@ -272,13 +272,10 @@ public class TCPServer extends Thread {
 	}
 
 	public void makeDir(String cmd, DataOutputStream out) throws IOException { // function 2
-		if (cmd.startsWith(currentDir)) {
+		if (cmd.startsWith(currentDir) || cmd.startsWith(sharedroot)) {
 			File newDir = new File(cmd);
 			newDir.mkdirs();
-		} else if (cmd.startsWith(sharedroot)) {
-			File newDir = new File(cmd);
-			newDir.mkdirs();
-		} else {
+		}else {
 			cmd = currentDir + "\\" + cmd;
 			try {
 				File newDir = new File(cmd);
@@ -296,7 +293,7 @@ public class TCPServer extends Thread {
 
 	public void upload(String filename, DataOutputStream out) throws IOException {
 		File fname = null;
-		if (filename.startsWith(sharedroot)) { // if the path provided starts with sharedroot
+		if (filename.startsWith(sharedroot) || filename.startsWith(currentDir)) { // if the path provided starts with sharedroot
 			fname = new File(filename);
 
 			if (!fname.exists()) {
@@ -387,7 +384,7 @@ public class TCPServer extends Thread {
 			return;
 		}
 		
-		if (filename.startsWith(sharedroot)) {
+		if (filename.startsWith(sharedroot) || filename.startsWith(currentDir)) {
 			File fname = new File(filename);
 			if (fname.exists() && fname.isFile()) {
 				fname.delete();
@@ -416,7 +413,7 @@ public class TCPServer extends Thread {
 			return;
 		}
 		
-		if (filename.startsWith(sharedroot)) {
+		if (filename.startsWith(sharedroot) || filename.startsWith(currentDir)) {
 			File fname = new File(filename);
 			if (fname.exists() && fname.isDirectory()) {
 				File[] fnameList = fname.listFiles();
