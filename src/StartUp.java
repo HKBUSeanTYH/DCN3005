@@ -84,7 +84,8 @@ public class StartUp {
 				client.sroot = sroot;				//passing clients personal root to client so can add/remove users
 
 				client.start();
-				client.join();
+				client.join();						//this puts the current thread (ie main thread?) to sleep until client thread is completed 
+													//this prevents the while loop in main thread to keep iterating without stop when we want to focus on client thread.
 			}catch (Exception e) {
 				System.err.println("Bad Input");
 			}
