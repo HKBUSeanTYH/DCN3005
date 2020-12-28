@@ -496,7 +496,7 @@ public class TCPServer extends Thread {
 				String name = new String(buffer, 0, nameLen);
 				
 				if (getFileExtension(name).equals("")) {				//if file extension is not provided, defaults back to original file extension type
-					name = name + getFileExtension(filename);
+					name = name +"."+ getFileExtension(filename);
 				}
 
 				File newFile = new File(file.getParent() + "\\" + name); // rename back to same directory
