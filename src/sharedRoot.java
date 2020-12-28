@@ -208,12 +208,6 @@ public class sharedRoot {
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
-//		File filed = new File("userData.txt");
-//		Scanner in = new Scanner(filed);
-//		
-//		while(in.hasNextLine()) {
-//			System.out.print(in.nextLine());
-//		}
 
 	}
 
