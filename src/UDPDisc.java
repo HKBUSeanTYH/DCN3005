@@ -4,14 +4,16 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.util.ArrayList;
 
 public class UDPDisc extends Thread{		//extends Thread
 	DatagramSocket socket;
 	String servernm;
+	ArrayList<String> serverpool = new ArrayList<String>();
 
 	public UDPDisc() throws SocketException {
 		socket = new DatagramSocket(9998);
-		//socket.setSoTimeout(15000);   //15s of receiving
+		socket.setSoTimeout(15000);   //15s of receiving
 	}
 	
 	public void sendMsg(String str) throws IOException {
@@ -45,8 +47,11 @@ public class UDPDisc extends Thread{		//extends Thread
 					name = name +" "+strTokens[i];
 				}
 			}
-			System.out.println("responding:\t" + name);
-			System.out.println("from IP: "+srcAddr);
+			if (!serverpool.contains(name)) {
+				serverpool.add(name);
+				System.out.println("responding:\t" + name);
+				System.out.println("from IP: "+srcAddr);
+			}
 		}
 		
 	}
@@ -56,7 +61,7 @@ public class UDPDisc extends Thread{		//extends Thread
 		while (true) {
 			try {
 				receiveMsg();
-			} catch (Exception e) {
+			} catch (SocketTimeoutException e /*Exception e*/) {
 				// TODO Auto-generated catch block
 				break;
 			}
@@ -65,7 +70,9 @@ public class UDPDisc extends Thread{		//extends Thread
 	
 	public void run() {
 		try {
-			disc();
+			while (true) {
+				disc();
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			System.out.println("Error in launching udp");
