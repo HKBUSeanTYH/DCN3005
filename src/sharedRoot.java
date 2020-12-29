@@ -1,8 +1,8 @@
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+// import java.io.FileInputStream;
+// import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
+// import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -34,7 +34,7 @@ public class sharedRoot {
 			while (!isDir) {
 				System.out.println("Please provide the path to your shared directory");
 				String spath = scanner.nextLine();
-				String[] spathTokens = spath.trim().split(" ");
+				//String[] spathTokens = spath.trim().split(" ");
 				File sfile = new File(spath);
 
 				if (!sfile.isDirectory()) {		//only accept directory
