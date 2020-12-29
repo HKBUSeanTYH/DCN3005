@@ -60,9 +60,9 @@ public class UDPDisc extends Thread{		//extends Thread
 		long start = System.currentTimeMillis();
 		//System.out.println(start);
 		do {
-			sendMsg("initiate discovery");
 			while (true) {
 				try {
+					sendMsg("initiate discovery");
 					//System.out.println("b4");
 					receiveMsg();
 					//System.out.println("after");
