@@ -26,5 +26,9 @@ public class newStart {
 
 		Thread.sleep(500);			//delays StartUp so that the server thread finish printing out messages
 		
+		//Create a user interface that allows user to add/delete users from userData.txt and initiate server-client connections
+		
+		//
+		
 	}
 }

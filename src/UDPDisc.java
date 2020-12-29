@@ -57,22 +57,36 @@ public class UDPDisc extends Thread{		//extends Thread
 	}
 	
 	public void disc() throws IOException {
-		sendMsg("initiate discovery");
-		while (true) {
+		long start = System.currentTimeMillis();
+		//System.out.println(start);
+		do {
+			sendMsg("initiate discovery");
+			while (true) {
+				try {
+					//System.out.println("b4");
+					receiveMsg();
+					//System.out.println("after");
+				} catch (SocketTimeoutException e /*Exception e*/) {
+					// TODO Auto-generated catch block
+					break;
+				}
+			}
+			//System.out.println(System.currentTimeMillis() - start);
+		}while(System.currentTimeMillis() - start <= 15000);				//non-stop discovery process in first 15s
+		
+		while (true) {														//while loop for response from other clients, timeout after 15s and then restart. prevents inactive thread
 			try {
 				receiveMsg();
 			} catch (SocketTimeoutException e /*Exception e*/) {
-				// TODO Auto-generated catch block
-				break;
+				//System.out.println("Staying active");
 			}
 		}
+		
 	}
 	
 	public void run() {
 		try {
-			while (true) {
-				disc();
-			}
+			disc();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			System.out.println("Error in launching udp");
